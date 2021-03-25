@@ -2,19 +2,21 @@ import React, {useState} from 'react';
 import {Text, View} from 'react-native';
 import {DeviceModel, DeviceType} from '../../screens/devices/DeviceModel';
 import {TapeModel} from '../../screens/tape/TapeModel';
+import TapeStore from '../../screens/tape/TapeStore';
 import TapeCell, {TapeCellProps} from '../../screens/tape/UI/tapeCell';
+import DeviceCommonStore from '../../stores/DeviceCommonStore';
 import styles from './styles';
 
 export interface DeviceCellProps {
-  device: DeviceModel;
+  deviceStore: DeviceCommonStore;
   onPress: () => void;
 }
 
 const DeviceCell = (props: DeviceCellProps) => {
-  switch (props.device.type) {
+  switch (props.deviceStore.model.type) {
     case DeviceType.tape:
       const tapeCellProps: TapeCellProps = {
-        tape: props.device as TapeModel,
+        tapeStore: props.deviceStore as TapeStore,
         onPress: props.onPress,
       };
 

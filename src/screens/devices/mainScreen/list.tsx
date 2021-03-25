@@ -41,9 +41,16 @@ const DevicesDataList = (props: DevicesDataListProps) => {
 
     switch (model.dataType) {
       case 'room':
-        return <RoomCell model={model} onPress={onPressRoom} />;
+        return (
+          <RoomCell roomStore={store as RoomStore} onPress={onPressRoom} />
+        );
       case 'device':
-        return <DeviceCell device={model} onPress={onPressDevice} />;
+        return (
+          <DeviceCell
+            deviceStore={store as DeviceCommonStore}
+            onPress={onPressDevice}
+          />
+        );
     }
   };
 
