@@ -1,5 +1,5 @@
 import {ImageSourcePropType} from 'react-native';
-import {DATA_TYPE} from '../../constants';
+import {DATA_TYPE} from 'constants/index';
 
 export enum DeviceType {
   tape,

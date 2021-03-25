@@ -1,12 +1,11 @@
 import {action, observable, decorate, computed} from 'mobx';
-import DeviceCommonStore from '../../stores/DeviceCommonStore';
-import StorageManager, {DataType} from '../../services/StorageManager';
-import {DeviceModel, DeviceType} from './DeviceModel';
-import TapeStore from '../tape/TapeStore';
-import RoomStore from '../../stores/RoomStore';
-import {DATA_TYPE} from '../../constants';
-import {TapeStatus} from '../tape/TapeModel';
-import {Images} from '../../styles';
+import DeviceCommonStore from 'stores/DeviceCommonStore';
+import {DeviceType} from './DeviceModel';
+import TapeStore from 'screens/tape/TapeStore';
+import RoomStore from 'stores/RoomStore';
+import {DATA_TYPE} from 'constants/index';
+import {TapeStatus} from 'screens/tape/TapeModel';
+import {Images} from 'styles';
 
 export default class DevicesStore {
   //   private chatsApi: DevicesApiInterface = new ChatApiService();

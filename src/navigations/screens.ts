@@ -1,5 +1,5 @@
-import DevicesScreen from '../screens/devices/mainScreen';
-import RoomScreen from '../screens/room/roomScreen';
+import DevicesScreen from 'screens/devices/mainScreen';
+import RoomScreen from 'screens/room/roomScreen';
 
 export default {
   DevicesScreen: {screen: DevicesScreen, name: 'Devices'},

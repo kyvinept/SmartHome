@@ -1,10 +1,9 @@
 import React, {useState} from 'react';
 import {Text, View} from 'react-native';
-import {DeviceModel, DeviceType} from '../../screens/devices/DeviceModel';
-import {TapeModel} from '../../screens/tape/TapeModel';
-import TapeStore from '../../screens/tape/TapeStore';
-import TapeCell, {TapeCellProps} from '../../screens/tape/UI/tapeCell';
-import DeviceCommonStore from '../../stores/DeviceCommonStore';
+import {DeviceType} from 'screens/devices/DeviceModel';
+import TapeStore from 'screens/tape/TapeStore';
+import TapeCell, {TapeCellProps} from 'screens/tape/UI/tapeCell';
+import DeviceCommonStore from 'stores/DeviceCommonStore';
 import styles from './styles';
 
 export interface DeviceCellProps {

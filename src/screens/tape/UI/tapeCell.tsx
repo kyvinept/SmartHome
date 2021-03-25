@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {Image, Text, TouchableOpacity, View} from 'react-native';
-import {TapeModel} from '../TapeModel';
-import TapeStore from '../TapeStore';
+import TapeStore from 'screens/tape/TapeStore';
 import styles from './styles';
 
 export interface TapeCellProps {

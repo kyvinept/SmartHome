@@ -1,5 +1,5 @@
 import {action, observable, decorate, computed} from 'mobx';
-import {RoomModel} from '../screens/devices/RoomModel';
+import {RoomModel} from 'screens/devices/RoomModel';
 import DeviceCommonStore from './DeviceCommonStore';
 
 export default class RoomStore {

@@ -1,4 +1,4 @@
-import {DeviceModel, DeviceType} from '../devices/DeviceModel';
+import {DeviceModel, DeviceType} from 'screens/devices/DeviceModel';
 
 export enum TapeStatus {
   on = 'on',

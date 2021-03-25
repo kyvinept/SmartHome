@@ -2,14 +2,14 @@ import React, {useState} from 'react';
 import {FlatList, ListRenderItemInfo, Text, View} from 'react-native';
 import styles from './styles';
 import {useObserver} from 'mobx-react';
-import DevicesStore from '../DevicesStore';
-import RoomStore from '../../../stores/RoomStore';
-import DeviceCommonStore from '../../../stores/DeviceCommonStore';
-import RoomCell from '../../../components/roomCell';
-import NavigationService from '../../../navigations/NavigationService';
-import Screens from '../../../navigations/screens';
-import DeviceCell from '../../../components/deviceCell';
-import {DeviceModel, DeviceType} from '../DeviceModel';
+import DevicesStore from 'screens/devices/DevicesStore';
+import RoomStore from 'stores/RoomStore';
+import DeviceCommonStore from 'stores/DeviceCommonStore';
+import RoomCell from 'components/roomCell';
+import NavigationService from 'navigations/NavigationService';
+import Screens from 'navigations/screens';
+import DeviceCell from 'components/deviceCell';
+import {DeviceModel, DeviceType} from 'screens/devices/DeviceModel';
 
 export interface DevicesDataListProps {
   devicesStore: DevicesStore;
@@ -52,6 +52,8 @@ const DevicesDataList = (props: DevicesDataListProps) => {
           />
         );
     }
+
+    return <View />;
   };
 
   const renderContent = () => {

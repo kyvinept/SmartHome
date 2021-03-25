@@ -1,11 +1,9 @@
 import React, {useState} from 'react';
 import {View} from 'react-native';
-import BackgroundView, {
-  BackgroundViewProps,
-} from '../../../components/backgroundView';
+import BackgroundView, {BackgroundViewProps} from 'components/backgroundView';
 import styles from './styles';
 import {useObserver} from 'mobx-react';
-import DevicesStore from '../DevicesStore';
+import DevicesStore from 'screens/devices/DevicesStore';
 import DevicesDataList from './list';
 
 const DevicesScreen = () => {

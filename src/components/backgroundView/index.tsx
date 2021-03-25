@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {SafeAreaView} from 'react-native';
-import Header, {HeaderProps} from '../header';
+import Header, {HeaderProps} from 'components/header';
 import styles from './styles';
 
 export interface BackgroundViewProps {

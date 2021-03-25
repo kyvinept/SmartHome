@@ -1,11 +1,9 @@
 import React, {useState} from 'react';
 import {View} from 'react-native';
-import BackgroundView, {
-  BackgroundViewProps,
-} from '../../../components/backgroundView';
+import BackgroundView, {BackgroundViewProps} from 'components/backgroundView';
 import styles from './styles';
 import {useObserver} from 'mobx-react';
-import RoomStore from '../../../stores/RoomStore';
+import RoomStore from 'stores/RoomStore';
 
 export interface RoomScreenProps {
   navigation: {

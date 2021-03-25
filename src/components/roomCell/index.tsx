@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {Text, TouchableOpacity} from 'react-native';
-import {RoomModel} from '../../screens/devices/RoomModel';
-import RoomStore from '../../stores/RoomStore';
+import RoomStore from 'stores/RoomStore';
 import styles from './styles';
 
 export interface RoomCellProps {
