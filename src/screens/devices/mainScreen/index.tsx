@@ -5,8 +5,12 @@ import BackgroundView, {
 } from '../../../components/backgroundView';
 import styles from './styles';
 import {useObserver} from 'mobx-react';
+import DevicesStore from '../DevicesStore';
+import DevicesDataList from './list';
 
 const DevicesScreen = () => {
+  const devicesStore = new DevicesStore();
+
   const onPressAddButton = () => {};
 
   const renderContent = () => {
@@ -20,7 +24,11 @@ const DevicesScreen = () => {
       },
     };
 
-    return <BackgroundView {...backgroundViewProps} />;
+    return (
+      <BackgroundView {...backgroundViewProps}>
+        <DevicesDataList devicesStore={devicesStore} />
+      </BackgroundView>
+    );
   };
 
   return useObserver(renderContent);
