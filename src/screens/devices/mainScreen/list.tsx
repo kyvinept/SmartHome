@@ -28,29 +28,13 @@ const DevicesDataList = (props: DevicesDataListProps) => {
       NavigationService.push(Screens.RoomScreen.name, {roomStore: store});
     };
 
-    const onPressDevice = () => {
-      switch ((model as DeviceModel).type) {
-        case DeviceType.tape:
-          NavigationService.push(Screens.RoomScreen.name, {roomStore: store});
-          break;
-
-        default:
-          break;
-      }
-    };
-
     switch (model.dataType) {
       case 'room':
         return (
           <RoomCell roomStore={store as RoomStore} onPress={onPressRoom} />
         );
       case 'device':
-        return (
-          <DeviceCell
-            deviceStore={store as DeviceCommonStore}
-            onPress={onPressDevice}
-          />
-        );
+        return <DeviceCell deviceStore={store as DeviceCommonStore} />;
     }
 
     return <View />;

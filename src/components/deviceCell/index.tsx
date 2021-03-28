@@ -1,3 +1,5 @@
+import NavigationService from 'navigations/NavigationService';
+import Screens from 'navigations/screens';
 import React, {useState} from 'react';
 import {Text, View} from 'react-native';
 import {DeviceType} from 'screens/devices/DeviceModel';
@@ -8,7 +10,6 @@ import styles from './styles';
 
 export interface DeviceCellProps {
   deviceStore: DeviceCommonStore;
-  onPress: () => void;
 }
 
 const DeviceCell = (props: DeviceCellProps) => {
@@ -16,7 +17,6 @@ const DeviceCell = (props: DeviceCellProps) => {
     case DeviceType.tape:
       const tapeCellProps: TapeCellProps = {
         tapeStore: props.deviceStore as TapeStore,
-        onPress: props.onPress,
       };
 
       return <TapeCell {...tapeCellProps} />;

@@ -1,4 +1,6 @@
 import {StyleSheet} from 'react-native';
+import {useTheme} from 'services/ThemeManager';
+const theme = useTheme();
 
 export default StyleSheet.create({
   container: {
@@ -7,10 +9,11 @@ export default StyleSheet.create({
     paddingHorizontal: 20,
     alignItems: 'center',
     flexDirection: 'row',
+    // backgroundColor: 'red',
   },
   headerText: {
-    fontSize: 20,
-    fontWeight: 'bold',
+    fontFamily: theme.fonts.ljkMilkMustacheBB,
+    fontSize: 22,
     flex: 1,
     textAlign: 'center',
   },

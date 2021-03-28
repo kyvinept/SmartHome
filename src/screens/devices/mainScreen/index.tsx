@@ -5,18 +5,25 @@ import styles from './styles';
 import {useObserver} from 'mobx-react';
 import DevicesStore from 'screens/devices/DevicesStore';
 import DevicesDataList from './list';
+import NavigationService from 'navigations/NavigationService';
+import Screens from 'navigations/screens';
+import strings from 'translations';
+import {useTheme} from 'services/ThemeManager';
 
 const DevicesScreen = () => {
   const devicesStore = new DevicesStore();
+  const theme = useTheme();
 
-  const onPressAddButton = () => {};
+  const onPressAddButton = () => {
+    NavigationService.push(Screens.AddDeviceScreen.name);
+  };
 
   const renderContent = () => {
     const backgroundViewProps: BackgroundViewProps = {
       header: {
-        text: 'Devices',
+        text: strings.devices,
         rightButtonProps: {
-          text: 'Add',
+          image: {image: theme.images.plus, width: 20, alignSelf: 'flex-end'},
           onPress: onPressAddButton,
         },
       },

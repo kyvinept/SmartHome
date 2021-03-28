@@ -1,4 +1,6 @@
 import React from 'react';
+import AddDeviceStore from 'screens/devices/AddDeviceStore';
+import NewDeviceDetectedNotification from 'screens/devices/newDeviceDetectedNotification';
 import AppContainer from './src/navigations';
 import NavigationService from './src/navigations/NavigationService';
 import rootStore from './src/stores';
@@ -14,6 +16,7 @@ const App = () => {
           }
         }}
       />
+      <NewDeviceDetectedNotification addDeviceStore={new AddDeviceStore()} />
     </StoreProvider>
   );
 };

@@ -17,12 +17,14 @@ export default class DevicesStore {
       },
       [
         new TapeStore({
-          name: 'Tape',
-          status: TapeStatus.on,
+          name: 'Tape1',
+          status: TapeStatus.off,
           dataType: DATA_TYPE.DEVICE,
           ip: '12.213.124124',
           icon: Images.lightTheme.settings,
           type: DeviceType.tape,
+          brightness: 0.5,
+          color: '#FFD700',
         }),
       ],
     ),

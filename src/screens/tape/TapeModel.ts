@@ -8,4 +8,6 @@ export enum TapeStatus {
 export interface TapeModel extends DeviceModel {
   type: DeviceType.tape;
   status: TapeStatus;
+  brightness: number;
+  color: string;
 }

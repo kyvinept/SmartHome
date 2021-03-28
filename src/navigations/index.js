@@ -11,6 +11,12 @@ const App = createStackNavigator(
     Room: {
       screen: Screens.RoomScreen.screen,
     },
+    Tape: {
+      screen: Screens.TapeScreen.screen,
+    },
+    AddDevice: {
+      screen: Screens.AddDeviceScreen.screen,
+    },
   },
   {
     initialRouteName: 'Devices',

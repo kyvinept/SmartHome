@@ -1,5 +1,8 @@
 import {StyleSheet} from 'react-native';
 import {UI} from 'constants/index';
+import {useTheme} from 'services/ThemeManager';
+
+const theme = useTheme();
 
 export default StyleSheet.create({
   container: {
@@ -13,7 +16,9 @@ export default StyleSheet.create({
     width: 30,
   },
   text: {
+    flex: 1,
     fontSize: 16,
     marginLeft: 10,
+    fontFamily: theme.fonts.notoSans,
   },
 });

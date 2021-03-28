@@ -5,7 +5,7 @@ import styles from './styles';
 
 export interface BackgroundViewProps {
   header?: HeaderProps;
-  children?: JSX.Element;
+  children?: JSX.Element | JSX.Element[];
 }
 
 const BackgroundView = (props: BackgroundViewProps) => {

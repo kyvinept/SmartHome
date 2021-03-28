@@ -4,8 +4,12 @@ import styles from './styles';
 
 export interface HeaderButtonProps {
   text?: string;
-  image?: ImageSourcePropType;
-  onPress: () => void;
+  image?: {
+    image: ImageSourcePropType;
+    width: number;
+    alignSelf: 'flex-start' | 'flex-end';
+  };
+  onPress?: () => void;
 }
 
 const HeaderButton = (props: HeaderButtonProps) => {
@@ -20,7 +24,16 @@ const HeaderButton = (props: HeaderButtonProps) => {
         bottom: 3,
       }}>
       {props.text && <Text style={styles.text}>{props.text}</Text>}
-      {props.image && <Image style={styles.image} source={props.image} />}
+      {props.image && (
+        <Image
+          resizeMode={'contain'}
+          style={[
+            styles.image,
+            {width: props.image.width, alignSelf: props.image.alignSelf},
+          ]}
+          source={props.image.image}
+        />
+      )}
     </TouchableOpacity>
   );
 };

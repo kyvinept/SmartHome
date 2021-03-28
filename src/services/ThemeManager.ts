@@ -1,4 +1,4 @@
-import {Colors, Images} from '../styles';
+import {Colors, Fonts, Images} from '../styles';
 
 let isDark = false;
 
@@ -11,6 +11,7 @@ export const useTheme = () => {
     isDark: isDark,
     colors: getCurrentColors(),
     images: getCurrentImages(),
+    fonts: Fonts,
   };
 };
 

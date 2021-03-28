@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* SmartHomeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* SmartHomeTests.m */; };
+		0DE0D859CD2F4D02B2BF5A85 /* HelveticaGrumov.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 49EA25D2E62B4A66A2F3A218 /* HelveticaGrumov.ttf */; };
 		0F64AF1E6DFE11934D3BEC97 /* libPods-SmartHome-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0414EFAADC13B70D19D5A2E8 /* libPods-SmartHome-tvOSTests.a */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
@@ -16,9 +17,12 @@
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* SmartHomeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* SmartHomeTests.m */; };
+		58AA7EA55A5E4D28AFCBC5D6 /* CourierPrime-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EB5F204CCE6A40E1B04C93F0 /* CourierPrime-Bold.ttf */; };
 		64FF2056F99F745224B19167 /* libPods-SmartHome-SmartHomeTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 22C4A850379B36513A05FCD5 /* libPods-SmartHome-SmartHomeTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		90EFDFFE3ADF4B10BF4BA504 /* Noto Sans.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FBB43028B37F41A78A35CA73 /* Noto Sans.ttf */; };
 		D91D8411C238283D65D70377 /* libPods-SmartHome-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A13F24A593A131042D0F31F /* libPods-SmartHome-tvOS.a */; };
+		DAC445589DA343389F10D39A /* ljk_Milk Mustache BB.otf in Resources */ = {isa = PBXBuildFile; fileRef = E90BD2B471AE45A287FCC54F /* ljk_Milk Mustache BB.otf */; };
 		E49B8E916820532192F63EEF /* libPods-SmartHome.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61C0AB0D2CF59CCA6CEEF0DB /* libPods-SmartHome.a */; };
 /* End PBXBuildFile section */
 
@@ -59,14 +63,19 @@
 		2D02E4901E0B4A5D006451C7 /* SmartHome-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "SmartHome-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3C53C4419F008A209FADBF44 /* Pods-SmartHome-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartHome-tvOS.release.xcconfig"; path = "Target Support Files/Pods-SmartHome-tvOS/Pods-SmartHome-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		419E793FA6D7DE60AB7215AF /* Pods-SmartHome-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartHome-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-SmartHome-tvOSTests/Pods-SmartHome-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
+		49EA25D2E62B4A66A2F3A218 /* HelveticaGrumov.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = HelveticaGrumov.ttf; path = ../src/assets/fonts/HelveticaGrumov.ttf; sourceTree = "<group>"; };
+		53DC4A82E59F4C10BEFEB073 /* Noto-Sans.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Noto-Sans.ttf"; path = "../src/assets/fonts/Noto-Sans.ttf"; sourceTree = "<group>"; };
 		55C6180905166493F92EA1AD /* Pods-SmartHome-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartHome-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-SmartHome-tvOSTests/Pods-SmartHome-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		5E3DF841B310C5770A9C50B7 /* Pods-SmartHome-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartHome-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-SmartHome-tvOS/Pods-SmartHome-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		61C0AB0D2CF59CCA6CEEF0DB /* libPods-SmartHome.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SmartHome.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = SmartHome/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		E90BD2B471AE45A287FCC54F /* ljk_Milk Mustache BB.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "ljk_Milk Mustache BB.otf"; path = "../src/assets/fonts/ljk_Milk Mustache BB.otf"; sourceTree = "<group>"; };
+		EB5F204CCE6A40E1B04C93F0 /* CourierPrime-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "CourierPrime-Bold.ttf"; path = "../src/assets/fonts/CourierPrime-Bold.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		F2B95E39E05BB03BAEAA04E1 /* Pods-SmartHome.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartHome.debug.xcconfig"; path = "Target Support Files/Pods-SmartHome/Pods-SmartHome.debug.xcconfig"; sourceTree = "<group>"; };
 		FA2EF450CC2CB97114A94FA7 /* Pods-SmartHome-SmartHomeTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartHome-SmartHomeTests.debug.xcconfig"; path = "Target Support Files/Pods-SmartHome-SmartHomeTests/Pods-SmartHome-SmartHomeTests.debug.xcconfig"; sourceTree = "<group>"; };
+		FBB43028B37F41A78A35CA73 /* Noto Sans.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Noto Sans.ttf"; path = "../src/assets/fonts/Noto Sans.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -180,6 +189,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				6B423B5FADDA2A3E672FD9B3 /* Pods */,
+				E6E7F140CA034BDD801D573E /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -195,6 +205,18 @@
 				2D02E4901E0B4A5D006451C7 /* SmartHome-tvOSTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		E6E7F140CA034BDD801D573E /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				EB5F204CCE6A40E1B04C93F0 /* CourierPrime-Bold.ttf */,
+				53DC4A82E59F4C10BEFEB073 /* Noto-Sans.ttf */,
+				49EA25D2E62B4A66A2F3A218 /* HelveticaGrumov.ttf */,
+				E90BD2B471AE45A287FCC54F /* ljk_Milk Mustache BB.otf */,
+				FBB43028B37F41A78A35CA73 /* Noto Sans.ttf */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -342,6 +364,10 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				58AA7EA55A5E4D28AFCBC5D6 /* CourierPrime-Bold.ttf in Resources */,
+				0DE0D859CD2F4D02B2BF5A85 /* HelveticaGrumov.ttf in Resources */,
+				DAC445589DA343389F10D39A /* ljk_Milk Mustache BB.otf in Resources */,
+				90EFDFFE3ADF4B10BF4BA504 /* Noto Sans.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import {Text, TouchableOpacity} from 'react-native';
+import {Image, Text, TouchableOpacity} from 'react-native';
+import {useTheme} from 'services/ThemeManager';
 import RoomStore from 'stores/RoomStore';
 import styles from './styles';
 
@@ -9,9 +10,16 @@ export interface RoomCellProps {
 }
 
 const RoomCell = (props: RoomCellProps) => {
+  const theme = useTheme();
+
   return (
     <TouchableOpacity style={styles.container} onPress={props.onPress}>
       <Text style={styles.text}>{props.roomStore.model.name}</Text>
+      <Image
+        style={styles.image}
+        resizeMode={'contain'}
+        source={theme.images.rightArrow}
+      />
     </TouchableOpacity>
   );
 };
