@@ -5,15 +5,14 @@ import {Text, View} from 'react-native';
 import strings from 'translations';
 import TextButton from 'components/textButton';
 import AddDeviceStore from '../AddDeviceStore';
+import {useAddDeviceStore} from 'stores/provider/useStore';
 
-export interface NewDeviceDetectedNotificationProps {
-  addDeviceStore: AddDeviceStore;
-}
+export interface NewDeviceDetectedNotificationProps {}
 
 const NewDeviceDetectedNotification = (
   props: NewDeviceDetectedNotificationProps,
 ) => {
-  const addDeviceStore = props.addDeviceStore;
+  const addDeviceStore = useAddDeviceStore();
 
   const renderContent = () => {
     return addDeviceStore.detectedNewDevice ? (

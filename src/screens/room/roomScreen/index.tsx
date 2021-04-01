@@ -7,6 +7,7 @@ import RoomStore from 'stores/RoomStore';
 import RoomDetailsList from './list';
 import {useTheme} from 'services/ThemeManager';
 import NavigationService from 'navigations/NavigationService';
+import Screens from 'navigations/screens';
 
 export interface RoomScreenProps {
   navigation: {
@@ -26,6 +27,12 @@ const RoomScreen = (props: RoomScreenProps) => {
     return <RoomDetailsList data={roomStore.devices} />;
   };
 
+  const onPressAddButton = () => {
+    NavigationService.push(Screens.AddDeviceScreen.name, {
+      selectedRoom: roomStore,
+    });
+  };
+
   const renderContent = () => {
     const backgroundView: BackgroundViewProps = {
       header: {
@@ -37,6 +44,10 @@ const RoomScreen = (props: RoomScreenProps) => {
             width: 25,
           },
           onPress: NavigationService.dismiss,
+        },
+        rightButtonProps: {
+          image: {image: theme.images.plus, width: 20, alignSelf: 'flex-end'},
+          onPress: onPressAddButton,
         },
       },
     };

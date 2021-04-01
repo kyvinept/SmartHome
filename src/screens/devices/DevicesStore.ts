@@ -6,8 +6,9 @@ import RoomStore from 'stores/RoomStore';
 import {DATA_TYPE} from 'constants/index';
 import {TapeStatus} from 'screens/tape/TapeModel';
 import {Images} from 'styles';
+import MainStore from 'stores/MainStore';
 
-export default class DevicesStore {
+export default class DevicesStore extends MainStore {
   //   private chatsApi: DevicesApiInterface = new ChatApiService();
   data: RoomStore[] = [
     new RoomStore(
@@ -28,9 +29,38 @@ export default class DevicesStore {
         }),
       ],
     ),
+    new RoomStore(
+      {
+        dataType: DATA_TYPE.ROOM,
+        name: 'Кухня214',
+      },
+      [],
+    ),
+    new RoomStore(
+      {
+        dataType: DATA_TYPE.ROOM,
+        name: 'Кухня dsd',
+      },
+      [],
+    ),
+    new RoomStore(
+      {
+        dataType: DATA_TYPE.ROOM,
+        name: 'Кухня asdasf',
+      },
+      [],
+    ),
+    new RoomStore(
+      {
+        dataType: DATA_TYPE.ROOM,
+        name: 'Кухня asfwefe212',
+      },
+      [],
+    ),
   ];
 
   constructor() {
+    super();
     // this.getDevicesFromStore();
   }
 

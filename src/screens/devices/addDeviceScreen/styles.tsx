@@ -1,4 +1,10 @@
 import {StyleSheet} from 'react-native';
-import {UI} from 'constants/index';
 
-export default StyleSheet.create({});
+export default StyleSheet.create({
+  scrollView: {
+    flex: 1,
+  },
+  spacer: {
+    height: 25,
+  },
+});

@@ -26,7 +26,7 @@ const TapeControlView = (props: TapeControlViewProps) => {
         <ColorsPanel
           colors={['#E9967A', '#FFD700', '#FFFF00', '#008000']}
           delegate={{
-            onAddColor: (color: string) => {},
+            onAddColor: tapeStore.onChangeColor,
             onSelectColor: tapeStore.onChangeColor,
           }}
         />

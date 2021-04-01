@@ -3,6 +3,37 @@ import {createAppContainer} from 'react-navigation';
 import Screens from './screens';
 import {createStackNavigator} from 'react-navigation-stack';
 
+const TapeStack = createStackNavigator(
+  {
+    Tape: {
+      screen: Screens.TapeScreen.screen,
+    },
+    ColorPicker: {
+      screen: Screens.ColorPickerScreen.screen,
+    },
+  },
+  {
+    transparentCard: true,
+    transitionConfig: () => ({
+      containerStyle: {
+        backgroundColor: 'transparent',
+      },
+      containerStyleLight: {
+        backgroundColor: 'transparent',
+      },
+      containerStyleDark: {
+        backgroundColor: 'transparent',
+      },
+    }),
+    mode: 'modal',
+    headerMode: 'none',
+    defaultNavigationOptions: {
+      gesturesEnabled: false,
+      animationEnabled: false,
+    },
+  },
+);
+
 const App = createStackNavigator(
   {
     Devices: {
@@ -11,9 +42,7 @@ const App = createStackNavigator(
     Room: {
       screen: Screens.RoomScreen.screen,
     },
-    Tape: {
-      screen: Screens.TapeScreen.screen,
-    },
+    Tape: TapeStack,
     AddDevice: {
       screen: Screens.AddDeviceScreen.screen,
     },

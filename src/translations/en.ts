@@ -6,4 +6,9 @@ export default {
   newDevice: 'New device',
   on: 'ON',
   off: 'OFF',
+  selectColor: 'Select color',
+  name: 'Name',
+  icon: 'Icon',
+  room: 'Room',
+  noDeviceFound: 'No device found',
 };

@@ -16,7 +16,7 @@ const App = () => {
           }
         }}
       />
-      <NewDeviceDetectedNotification addDeviceStore={new AddDeviceStore()} />
+      <NewDeviceDetectedNotification />
     </StoreProvider>
   );
 };

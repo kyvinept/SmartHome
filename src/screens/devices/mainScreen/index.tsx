@@ -9,9 +9,10 @@ import NavigationService from 'navigations/NavigationService';
 import Screens from 'navigations/screens';
 import strings from 'translations';
 import {useTheme} from 'services/ThemeManager';
+import {useDevicesStore} from 'stores/provider/useStore';
 
 const DevicesScreen = () => {
-  const devicesStore = new DevicesStore();
+  const devicesStore = useDevicesStore();
   const theme = useTheme();
 
   const onPressAddButton = () => {

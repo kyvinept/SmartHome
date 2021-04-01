@@ -35,6 +35,7 @@ const TapeVisualisation = (props: TapeVisualisationProps) => {
         {renderLamp()}
         {renderLamp()}
         {renderLamp()}
+        {renderLamp()}
         <View style={styles.rightPart} />
       </View>
     );
