@@ -8,6 +8,7 @@ import {TapeStatus} from 'screens/tape/TapeModel';
 import TapeStore from 'screens/tape/TapeStore';
 import styles from './styles';
 import ShadowView from 'components/shadowView';
+import {useColorsStore} from 'stores/provider/useStore';
 
 export interface TapeControlViewProps {
   tapeStore: TapeStore;
@@ -15,6 +16,7 @@ export interface TapeControlViewProps {
 
 const TapeControlView = (props: TapeControlViewProps) => {
   const tapeStore = props.tapeStore;
+  const colorsStore = useColorsStore();
 
   const renderContent = () => {
     return (
@@ -24,9 +26,12 @@ const TapeControlView = (props: TapeControlViewProps) => {
           delegate={{onValueChange: tapeStore.toggleStatus}}
         />
         <ColorsPanel
-          colors={['#E9967A', '#FFD700', '#FFFF00', '#008000']}
+          colors={colorsStore.colors}
           delegate={{
-            onAddColor: tapeStore.onChangeColor,
+            onAddColor: (color) => {
+              colorsStore.onAddColor(color);
+              tapeStore.onChangeColor(color);
+            },
             onSelectColor: tapeStore.onChangeColor,
           }}
         />

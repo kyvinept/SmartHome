@@ -1,19 +1,39 @@
+import {DATA_TYPE} from '../../constants';
 import {action, observable, decorate, computed} from 'mobx';
-import {ImageSourcePropType} from 'react-native';
+import TapeStore from 'screens/tape/TapeStore';
+import AddDeviceApiService, {
+  AddDeviceApiServiceInterface,
+} from 'services/API/AddDeviceApiService';
 import {useTheme} from 'services/ThemeManager';
 import MainStore from 'stores/MainStore';
 import RoomStore from 'stores/RoomStore';
+import {DeviceType} from './DeviceModel';
 import DevicesStore from './DevicesStore';
+import {TapeStatus} from 'screens/tape/TapeModel';
+import AlertHelper from 'helpers/AlertHelper';
+import strings from 'translations';
 
 const theme = useTheme();
 
 export default class AddDeviceStore extends MainStore {
-  //   private chatsApi: DevicesApiInterface = new ChatApiService();
+  private addDeviceApiService: AddDeviceApiServiceInterface = new AddDeviceApiService();
+
   devicesStore: DevicesStore;
   selectedRoomIndex?: number;
+  _selectedRoomIndexError?: string;
   selectedIconIndex?: number;
+  _selectedIconIndexError?: string;
+  selectedName?: string;
+  _selectedNameError?: string;
 
   detectedNewDevice: boolean = false;
+
+  _availableWifiList: string[] = [];
+  _isDeviceReadyForConnecting = false;
+  _selectedWifi: string | undefined;
+  _selectedWifiPassword: string | undefined;
+  _isWifiConnected = false;
+  _deviceIP = '192.168.0.18';
 
   constructor(devicesStore: DevicesStore) {
     super();
@@ -72,11 +92,96 @@ export default class AddDeviceStore extends MainStore {
 
   searchForNewDevice = () => {
     this._inProgress = true;
-    console.log('TODO: searchForNewDevice');
 
-    setTimeout(() => {
-      this._inProgress = false;
-    }, 5000);
+    this.addDeviceApiService
+      .searchNewDevice()
+      .then((wifiList) => {
+        this._availableWifiList = wifiList;
+        this._isDeviceReadyForConnecting = true;
+        console.log(wifiList);
+      })
+      .catch((err) => {
+        this._isDeviceReadyForConnecting = false;
+      })
+      .finally(() => {
+        this._inProgress = false;
+      });
+  };
+
+  connectDeviceToWifi = () => {
+    this._selectedWifi &&
+      this._selectedWifiPassword &&
+      this.addDeviceApiService
+        .connectDeviceToWifi(
+          this._selectedWifi,
+          this._selectedWifiPassword,
+          this._deviceIP,
+        )
+        .then(() => {
+          console.log('connectDeviceToWifi then');
+          this._isWifiConnected = true;
+        })
+        .catch((err) => {
+          console.log('connectDeviceToWifi err', err);
+        });
+  };
+
+  onChangeName = (name: string) => {
+    this.selectedName = name;
+  };
+
+  onSelectWifi = (wifi: string | undefined) => {
+    this._selectedWifi = wifi;
+  };
+
+  onPasswordChanged = (password: string) => {
+    this._selectedWifiPassword = password;
+  };
+
+  onAddDevice = () => {
+    if (!this._isWifiConnected) {
+      AlertHelper.showErrorAlert(strings.pleaseConnectToWifi);
+      return;
+    }
+
+    if ((this.selectedName?.length || 0) <= 3) {
+      this._selectedNameError = 'Error name';
+      return;
+    }
+
+    if (this.selectedIconIndex == undefined) {
+      this._selectedIconIndexError = 'Error icon';
+      return;
+    }
+
+    if (this.selectedRoomIndex == undefined) {
+      this._selectedRoomIndexError = 'Error room';
+      return;
+    }
+
+    return new Promise<void>((resolve, reject) => {
+      if (
+        this.selectedRoomIndex != undefined &&
+        this.selectedIconIndex != undefined &&
+        this.selectedName != undefined
+      ) {
+        const tape: TapeStore = new TapeStore({
+          type: DeviceType.tape,
+          dataType: DATA_TYPE.DEVICE,
+          status: TapeStatus.off,
+          brightness: 0.5,
+          ip: this._deviceIP,
+          icon: this.icons[this.selectedIconIndex].icon,
+          color: '',
+          name: this.selectedName,
+        });
+
+        this.devicesStore.data[this.selectedRoomIndex].addDevice(tape);
+        resolve();
+      } else {
+        reject();
+      }
+    });
   };
 }
 
@@ -84,6 +189,12 @@ decorate(AddDeviceStore, {
   detectedNewDevice: observable,
   selectedRoomIndex: observable,
   selectedIconIndex: observable,
+  selectedName: observable,
+  _availableWifiList: observable,
+  _isDeviceReadyForConnecting: observable,
+  _selectedWifi: observable,
+  _selectedWifiPassword: observable,
+  _isWifiConnected: observable,
 
   rooms: computed,
   icons: computed,
@@ -93,4 +204,8 @@ decorate(AddDeviceStore, {
   onSelectRoomByIndex: action,
   onSelectIcon: action,
   searchForNewDevice: action,
+  onSelectWifi: action,
+  onPasswordChanged: action,
+  connectDeviceToWifi: action,
+  onAddDevice: action,
 });

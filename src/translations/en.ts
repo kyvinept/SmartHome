@@ -10,5 +10,11 @@ export default {
   name: 'Name',
   icon: 'Icon',
   room: 'Room',
-  noDeviceFound: 'No device found',
+  tryAgain: 'Try again',
+  wifiConnection: 'Wifi connection',
+  password: 'Password',
+  connect: 'Connect',
+  error: 'error',
+  ok: 'OK',
+  pleaseConnectToWifi: 'Please connect the device to WiFI',
 };

@@ -1,3 +1,4 @@
+import ErrorText from 'components/errorText';
 import React, {useEffect, useState} from 'react';
 import {Text, View, TextInput, Image, ImageSourcePropType} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
@@ -11,6 +12,7 @@ export interface InputTextBlockItem {
 }
 
 export interface InputTextBlockProps {
+  error?: string;
   items: InputTextBlockItem[];
   delegate: {
     onSelectRoom: (index: number) => void;
@@ -49,6 +51,7 @@ const InputTextBlock = (props: InputTextBlockProps) => {
           <Image style={styles.addImage} source={theme.images.plus} />
         </TouchableOpacity>
       </View>
+      {props.error && <ErrorText error={props.error} />}
     </View>
   );
 };

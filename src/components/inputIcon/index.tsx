@@ -1,3 +1,4 @@
+import ErrorText from 'components/errorText';
 import React, {useEffect, useState} from 'react';
 import {Text, View, TextInput, Image, ImageSourcePropType} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
@@ -11,6 +12,7 @@ export interface InputIconItem {
 }
 
 export interface InputIconProps {
+  error?: string;
   icons: InputIconItem[];
   delegate: {
     onPressAddIcon: () => void;
@@ -48,6 +50,7 @@ const InputIcon = (props: InputIconProps) => {
           props.delegate.onPressAddIcon,
         )}
       </View>
+      {props.error && <ErrorText error={props.error} />}
     </View>
   );
 };

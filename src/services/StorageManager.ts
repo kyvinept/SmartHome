@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 export enum DataType {
   devices,
+  colors,
 }
 
 const storeData = async <T>(data: T, dataType: DataType) => {

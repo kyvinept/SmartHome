@@ -10,6 +10,9 @@ export interface ITheme {
   sun: ImageSourcePropType;
   moon: ImageSourcePropType;
   circlePlus: ImageSourcePropType;
+  reconnecting: ImageSourcePropType;
+  share: ImageSourcePropType;
+  wifi: ImageSourcePropType;
 }
 
 export const lightTheme: ITheme = {
@@ -22,6 +25,9 @@ export const lightTheme: ITheme = {
   sun: require('../assets/images/sun/sun.png'),
   moon: require('../assets/images/moon/moon.png'),
   circlePlus: require('../assets/images/circlePlus/circlePlus.png'),
+  reconnecting: require('../assets/images/reconnecting/reconnecting.png'),
+  share: require('../assets/images/share/share.png'),
+  wifi: require('../assets/images/wifi/wifi.png'),
 };
 
 export const darkTheme: ITheme = {
@@ -34,4 +40,7 @@ export const darkTheme: ITheme = {
   sun: require('../assets/images/sun/sun.png'),
   moon: require('../assets/images/moon/moon.png'),
   circlePlus: require('../assets/images/circlePlus/circlePlus.png'),
+  reconnecting: require('../assets/images/reconnecting/reconnecting.png'),
+  share: require('../assets/images/share/share.png'),
+  wifi: require('../assets/images/wifi/wifi.png'),
 };

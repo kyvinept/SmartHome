@@ -1,88 +1,89 @@
-import {action, observable, decorate, computed} from 'mobx';
+import {action, observable, decorate, computed, reaction} from 'mobx';
 import DeviceCommonStore from 'stores/DeviceCommonStore';
-import {DeviceType} from './DeviceModel';
+import {DeviceModel, DeviceType} from './DeviceModel';
 import TapeStore from 'screens/tape/TapeStore';
 import RoomStore from 'stores/RoomStore';
 import {DATA_TYPE} from 'constants/index';
-import {TapeStatus} from 'screens/tape/TapeModel';
+import {TapeModel, TapeStatus} from 'screens/tape/TapeModel';
 import {Images} from 'styles';
 import MainStore from 'stores/MainStore';
+import StorageManager, {DataType} from 'services/StorageManager';
+import {RoomModel} from './RoomModel';
 
 export default class DevicesStore extends MainStore {
   //   private chatsApi: DevicesApiInterface = new ChatApiService();
+  onUpdateDevices = () => {
+    this.saveDevicesToStore();
+  };
+
   data: RoomStore[] = [
     new RoomStore(
       {
         dataType: DATA_TYPE.ROOM,
         name: 'Кухня',
       },
-      [
-        new TapeStore({
-          name: 'Tape1',
-          status: TapeStatus.off,
-          dataType: DATA_TYPE.DEVICE,
-          ip: '12.213.124124',
-          icon: Images.lightTheme.settings,
-          type: DeviceType.tape,
-          brightness: 0.5,
-          color: '#FFD700',
-        }),
-      ],
-    ),
-    new RoomStore(
-      {
-        dataType: DATA_TYPE.ROOM,
-        name: 'Кухня214',
-      },
       [],
-    ),
-    new RoomStore(
-      {
-        dataType: DATA_TYPE.ROOM,
-        name: 'Кухня dsd',
-      },
-      [],
-    ),
-    new RoomStore(
-      {
-        dataType: DATA_TYPE.ROOM,
-        name: 'Кухня asdasf',
-      },
-      [],
-    ),
-    new RoomStore(
-      {
-        dataType: DATA_TYPE.ROOM,
-        name: 'Кухня asfwefe212',
-      },
-      [],
+      this.onUpdateDevices,
     ),
   ];
 
   constructor() {
     super();
-    // this.getDevicesFromStore();
+    this.getDevicesFromStore();
   }
 
-  // private getDevicesFromStore = async () => {
-  //   const devices = (await StorageManager.retrieveData(
-  //     DataType.devices,
-  //   )) as DeviceModel[];
+  private saveDevicesToStore = () => {
+    const arr: (RoomModel | DeviceModel)[] = [];
+    this.data.forEach((item) => {
+      arr.push(item.model);
+      item.devices.forEach((device) => {
+        arr.push(device.model);
+      });
+    });
 
-  //   if (!devices) {
-  //     return;
-  //   }
+    console.log('saveDevicesToStore', JSON.stringify(arr));
+    StorageManager.storeData(JSON.stringify(arr), DataType.devices);
+  };
 
-  //   this.data = devices.map((device) => {
-  //     switch (device.type) {
-  //       case DeviceType.tape:
-  //         return new TapeStore(device);
+  private getDevicesFromStore = async () => {
+    const devicesJson = await StorageManager.retrieveData<string>(
+      DataType.devices,
+    );
 
-  //       default:
-  //         break;
-  //     }
-  //   });
-  // };
+    if (devicesJson) {
+      const devices = JSON.parse(devicesJson) as (RoomModel | DeviceModel)[];
+
+      const rooms: RoomStore[] = [];
+      for (let i = 0; i < devices.length; i++) {
+        const item = devices[i];
+
+        if (item.dataType == DATA_TYPE.ROOM) {
+          const deviceStores: DeviceCommonStore[] = [];
+          for (let j = i + 1; j < devices.length; j++) {
+            const device = devices[j];
+            if (device.dataType == DATA_TYPE.DEVICE) {
+              switch (device.type) {
+                case DeviceType.tape:
+                  const deviceStore = new TapeStore(device as TapeModel);
+                  deviceStores.push(deviceStore);
+                  break;
+                default:
+                  break;
+              }
+            } else {
+              i = j;
+              break;
+            }
+          }
+
+          rooms.push(new RoomStore(item, deviceStores, this.onUpdateDevices));
+        }
+      }
+
+      this.data = rooms;
+      console.log(rooms);
+    }
+  };
 
   get preparedData() {
     const data: (DeviceCommonStore | RoomStore)[] = [];

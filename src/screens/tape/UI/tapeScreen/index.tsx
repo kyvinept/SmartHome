@@ -37,6 +37,14 @@ const TapeScreen = (props: TapeScreenProps) => {
           },
           onPress: NavigationService.dismiss,
         },
+        rightButtonProps: {
+          image: {
+            image: theme.images.share,
+            alignSelf: 'flex-end',
+            width: 20,
+          },
+          onPress: () => {},
+        },
       },
     };
 
