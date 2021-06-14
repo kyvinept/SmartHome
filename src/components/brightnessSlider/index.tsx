@@ -22,7 +22,7 @@ const BrightnessSlider = (props: BrightnessSliderProps) => {
         value={props.value}
         minimumValue={0}
         maximumValue={1}
-        onValueChange={props.delegate.onValueChange}
+        onSlidingComplete={props.delegate.onValueChange}
       />
       <Image style={styles.image} source={theme.images.sun} />
     </View>

@@ -4,11 +4,14 @@ import {DeviceModel, DeviceType} from './DeviceModel';
 import TapeStore from 'screens/tape/TapeStore';
 import RoomStore from 'stores/RoomStore';
 import {DATA_TYPE} from 'constants/index';
-import {TapeModel, TapeStatus} from 'screens/tape/TapeModel';
+import {ShowingModeType, TapeModel, TapeStatus} from 'screens/tape/TapeModel';
 import {Images} from 'styles';
 import MainStore from 'stores/MainStore';
 import StorageManager, {DataType} from 'services/StorageManager';
 import {RoomModel} from './RoomModel';
+import {useTheme} from 'services/ThemeManager';
+
+const theme = useTheme();
 
 export default class DevicesStore extends MainStore {
   //   private chatsApi: DevicesApiInterface = new ChatApiService();
@@ -20,9 +23,45 @@ export default class DevicesStore extends MainStore {
     new RoomStore(
       {
         dataType: DATA_TYPE.ROOM,
+        name: 'Гостинная',
+      },
+      [
+        new TapeStore({
+          type: DeviceType.tape,
+          dataType: DATA_TYPE.DEVICE,
+          status: TapeStatus.off,
+          brightness: 0.5,
+          ip: '192.168.0.18',
+          icon: theme.images.moon,
+          color: '',
+          name: 'Name',
+          showingMode: {
+            type: ShowingModeType.full,
+          },
+        }),
+      ],
+      this.onUpdateDevices,
+    ),
+    new RoomStore(
+      {
+        dataType: DATA_TYPE.ROOM,
         name: 'Кухня',
       },
-      [],
+      [
+        new TapeStore({
+          type: DeviceType.tape,
+          dataType: DATA_TYPE.DEVICE,
+          status: TapeStatus.off,
+          brightness: 0.5,
+          ip: '192.168.0.17',
+          icon: theme.images.moon,
+          color: '',
+          name: 'Kitchen',
+          showingMode: {
+            type: ShowingModeType.full,
+          },
+        }),
+      ],
       this.onUpdateDevices,
     ),
   ];

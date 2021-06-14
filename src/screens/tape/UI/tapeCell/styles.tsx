@@ -21,4 +21,8 @@ export default StyleSheet.create({
     marginLeft: 10,
     fontFamily: theme.fonts.notoSans,
   },
+  reconnectingImage: {
+    width: 20,
+    height: 20,
+  },
 });

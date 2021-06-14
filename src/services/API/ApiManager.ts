@@ -9,6 +9,12 @@ export enum RequestType {
 
 export enum RequestLink {
   setting = 'setting',
+  settings = 'settings',
+  on = 'on',
+  off = 'off',
+  brightness = 'brightness',
+  color = 'color',
+  home = '',
 }
 
 class ApiManager {
@@ -20,6 +26,7 @@ class ApiManager {
     params: {
       requestLink?: RequestLink;
       body?: Object;
+      linkParams?: Object;
     },
   ) => {
     this.controller = new AbortController();
@@ -27,9 +34,10 @@ class ApiManager {
     const url =
       'http://' + ip + '/' + (params.requestLink ? params.requestLink : '');
 
-    setTimeout(() => {
-      this.controller?.abort();
-    }, 3000);
+    // setTimeout(() => {
+    //   this.controller?.abort();
+    // }, 3000);
+    console.log(url, params.body);
 
     return new Promise<T>((resolve, reject) => {
       fetch(url, {

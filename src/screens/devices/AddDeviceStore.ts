@@ -9,7 +9,7 @@ import MainStore from 'stores/MainStore';
 import RoomStore from 'stores/RoomStore';
 import {DeviceType} from './DeviceModel';
 import DevicesStore from './DevicesStore';
-import {TapeStatus} from 'screens/tape/TapeModel';
+import {ShowingModeType, TapeStatus} from 'screens/tape/TapeModel';
 import AlertHelper from 'helpers/AlertHelper';
 import strings from 'translations';
 
@@ -174,6 +174,9 @@ export default class AddDeviceStore extends MainStore {
           icon: this.icons[this.selectedIconIndex].icon,
           color: '',
           name: this.selectedName,
+          showingMode: {
+            type: ShowingModeType.full,
+          },
         });
 
         this.devicesStore.data[this.selectedRoomIndex].addDevice(tape);

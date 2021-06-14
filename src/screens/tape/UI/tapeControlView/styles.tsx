@@ -8,7 +8,7 @@ export default StyleSheet.create({
   container: {
     padding: 20,
     width: dimension.width - 40,
-    height: 350,
+    height: 380,
     marginHorizontal: 20,
     marginBottom: 20,
     alignItems: 'center',

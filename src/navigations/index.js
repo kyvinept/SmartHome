@@ -11,6 +11,9 @@ const TapeStack = createStackNavigator(
     ColorPicker: {
       screen: Screens.ColorPickerScreen.screen,
     },
+    TapeModePicker: {
+      screen: Screens.TapeModePickerScreen.screen,
+    },
   },
   {
     transparentCard: true,
