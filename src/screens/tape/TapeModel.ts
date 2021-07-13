@@ -26,10 +26,16 @@ export interface PartShowingMode {
 
 export type ShowingMode = PartShowingMode | FullShowingMode;
 
+export interface NightModeType {
+  startTime: Date;
+  endTime: Date;
+}
+
 export interface TapeModel extends DeviceModel {
   type: DeviceType.tape;
   status: TapeStatus;
   brightness: number;
   showingMode: ShowingMode;
   color: string;
+  nightMode?: NightModeType;
 }

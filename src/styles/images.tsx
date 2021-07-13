@@ -11,9 +11,10 @@ export interface ITheme {
   moon: ImageSourcePropType;
   circlePlus: ImageSourcePropType;
   reconnecting: ImageSourcePropType;
-  // reconnectingGiphy: ImageSourcePropType;
+  night: ImageSourcePropType;
   share: ImageSourcePropType;
   wifi: ImageSourcePropType;
+  showingMode: ImageSourcePropType;
 }
 
 export const lightTheme: ITheme = {
@@ -27,9 +28,10 @@ export const lightTheme: ITheme = {
   moon: require('../assets/images/moon/moon.png'),
   circlePlus: require('../assets/images/circlePlus/circlePlus.png'),
   reconnecting: require('../assets/images/reconnecting/reconnecting.png'),
-  // reconnectingGiphy: require('../assets/images/reconnectingGiphy/reconnectingGiphy.gif'),
+  night: require('../assets/images/night/night.png'),
   share: require('../assets/images/share/share.png'),
   wifi: require('../assets/images/wifi/wifi.png'),
+  showingMode: require('../assets/images/showingMode/showingMode.png'),
 };
 
 export const darkTheme: ITheme = {
@@ -43,7 +45,8 @@ export const darkTheme: ITheme = {
   moon: require('../assets/images/moon/moon.png'),
   circlePlus: require('../assets/images/circlePlus/circlePlus.png'),
   reconnecting: require('../assets/images/reconnecting/reconnecting.png'),
-  // reconnectingGiphy: require('../assets/images/reconnectingGiphy/reconnectingGiphy.gif'),
+  night: require('../assets/images/night/night.png'),
   share: require('../assets/images/share/share.png'),
   wifi: require('../assets/images/wifi/wifi.png'),
+  showingMode: require('../assets/images/showingMode/showingMode.png'),
 };

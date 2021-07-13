@@ -40,6 +40,8 @@ export default class TapeStore extends DeviceCommonStore {
       this.tapeState = TapeStoreState.waiting;
       const networkTapeModel = await this.apiService.getSettings(this.model.ip);
       this.model.brightness = networkTapeModel.brightness;
+      this.model.color = networkTapeModel.color;
+      console.log(networkTapeModel);
 
       this.tapeState = TapeStoreState.ok;
     } catch (error) {
@@ -53,6 +55,7 @@ export default class TapeStore extends DeviceCommonStore {
   };
 
   onChangeColor = async (color: string) => {
+    console.log(color);
     this.model.color = color;
     this.apiService.setColor(this.model.ip, prepareColor(color));
   };
@@ -62,6 +65,16 @@ export default class TapeStore extends DeviceCommonStore {
       this.model.showingMode = mode;
       this.apiService.setMode(this.model.ip, this.model.showingMode);
     }
+  };
+
+  setNightMode = (startTime: Date, endTime: Date) => {
+    this.model.nightMode = {startTime, endTime};
+    this.apiService.setNightMode(this.model.ip, startTime, endTime);
+  };
+
+  clearNightMode = () => {
+    this.model.nightMode = undefined;
+    this.apiService.clearNightMode(this.model.ip);
   };
 }
 
@@ -74,4 +87,6 @@ decorate(TapeStore, {
   onChangeBrightness: action,
   onChangeColor: action,
   onChangeMode: action,
+  clearNightMode: action,
+  setNightMode: action,
 });

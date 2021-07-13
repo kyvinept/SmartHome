@@ -4,6 +4,7 @@ import TapeScreen from 'screens/tape/UI/tapeScreen';
 import AddDeviceScreen from 'screens/devices/addDeviceScreen';
 import ColorPickerScreen from 'screens/common/colorPicker';
 import TapeModePickerScreen from 'screens/tape/UI/tapeModePickerScreen';
+import TapeNightModeScreen from 'screens/tape/UI/tapeNightModeScreen';
 
 export default {
   DevicesScreen: {screen: DevicesScreen, name: 'Devices'},
@@ -14,5 +15,9 @@ export default {
   TapeModePickerScreen: {
     screen: TapeModePickerScreen,
     name: 'TapeModePicker',
+  },
+  TapeNightModeScreen: {
+    screen: TapeNightModeScreen,
+    name: 'TapeNightMode',
   },
 };

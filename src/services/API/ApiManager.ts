@@ -12,6 +12,8 @@ export enum RequestLink {
   settings = 'settings',
   on = 'on',
   off = 'off',
+  clearNightMode = 'delete_time',
+  setNightMode = 'time',
   brightness = 'brightness',
   color = 'color',
   home = '',
