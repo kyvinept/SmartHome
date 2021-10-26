@@ -84,7 +84,7 @@ const TapeNightModeScreen = (props: TapeNightModeScreenProps) => {
           text={
             'Start time' +
             (startTime
-              ? ': ' + startTime.getHours() + ':' + startTime.getMinutes()
+              ? ': ' + startTime.getHours() + ':' + startTime.getMinutes().toString().padStart(2, '0')
               : '')
           }
           delegate={{

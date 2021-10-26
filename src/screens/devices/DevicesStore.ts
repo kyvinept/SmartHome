@@ -1,11 +1,10 @@
-import {action, observable, decorate, computed, reaction} from 'mobx';
+import {observable, decorate, computed} from 'mobx';
 import DeviceCommonStore from 'stores/DeviceCommonStore';
 import {DeviceModel, DeviceType} from './DeviceModel';
 import TapeStore from 'screens/tape/TapeStore';
 import RoomStore from 'stores/RoomStore';
 import {DATA_TYPE} from 'constants/index';
 import {ShowingModeType, TapeModel, TapeStatus} from 'screens/tape/TapeModel';
-import {Images} from 'styles';
 import MainStore from 'stores/MainStore';
 import StorageManager, {DataType} from 'services/StorageManager';
 import {RoomModel} from './RoomModel';
@@ -35,6 +34,19 @@ export default class DevicesStore extends MainStore {
           icon: theme.images.moon,
           color: '',
           name: 'Name',
+          showingMode: {
+            type: ShowingModeType.full,
+          },
+        }),
+        new TapeStore({
+          type: DeviceType.tape,
+          dataType: DATA_TYPE.DEVICE,
+          status: TapeStatus.off,
+          brightness: 0.5,
+          ip: '192.168.0.19',
+          icon: theme.images.moon,
+          color: '',
+          name: 'New lamp',
           showingMode: {
             type: ShowingModeType.full,
           },
