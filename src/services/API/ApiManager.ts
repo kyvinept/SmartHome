@@ -14,9 +14,14 @@ export enum RequestLink {
   off = 'off',
   clearNightMode = 'delete_time',
   setNightMode = 'time',
+  changeTime = 'change_time',
   brightness = 'brightness',
   color = 'color',
   home = '',
+  oneByOneModeEnable = 'one_by_one_mode_enable',
+  fullModeEnable = 'full_mode_enable',
+  nightModeEnable = 'night_mode_enable',
+  nightModeDisable = 'night_mode_disable',
 }
 
 class ApiManager {
@@ -39,7 +44,7 @@ class ApiManager {
     // setTimeout(() => {
     //   this.controller?.abort();
     // }, 3000);
-    console.log(url, params.body);
+    console.log(url, type, params);
 
     return new Promise<T>((resolve, reject) => {
       fetch(url, {

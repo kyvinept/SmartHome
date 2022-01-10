@@ -1,6 +1,11 @@
 export interface NetworkTapeModel {
-  brightness: number;
-  color: string;
+  b: number;
+  c: string;
   mode: string;
-  partShowingTape: string;
+  pst: string;
+  is: string;
+  t: number;
+
+  // time
+  nm?: string;
 }

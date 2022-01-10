@@ -7,29 +7,28 @@ export enum TapeStatus {
 
 export enum ShowingModeType {
   full = 'full',
-  part = 'part',
+  oneByOne = 'oneByOne',
 }
 
 export interface FullShowingMode {
   type: ShowingModeType.full;
 }
 
-export interface PartShowingTape {
-  from: number;
-  to: number;
+export interface OneByOneShowingMode {
+  type: ShowingModeType.oneByOne;
 }
 
-export interface PartShowingMode {
-  type: ShowingModeType.part;
-  partShowingTape: PartShowingTape[];
-}
+export type ShowingMode = OneByOneShowingMode | FullShowingMode;
 
-export type ShowingMode = PartShowingMode | FullShowingMode;
-
-export interface NightModeType {
+export interface NightModeModel {
   startTime: Date;
   endTime: Date;
+  enabled: boolean;
 }
+
+export const DescriptionTypeTape = [
+  'RGB lamp with tuned brightness and night mode.',
+];
 
 export interface TapeModel extends DeviceModel {
   type: DeviceType.tape;
@@ -37,5 +36,5 @@ export interface TapeModel extends DeviceModel {
   brightness: number;
   showingMode: ShowingMode;
   color: string;
-  nightMode?: NightModeType;
+  description: string;
 }

@@ -1,6 +1,7 @@
 import Slider from '@react-native-community/slider';
-import React, {useState} from 'react';
-import {Image, View} from 'react-native';
+import ImageButton from 'components/imageButton';
+import React from 'react';
+import {View} from 'react-native';
 import {useTheme} from 'services/ThemeManager';
 import styles from './styles';
 
@@ -14,9 +15,21 @@ export interface BrightnessSliderProps {
 const BrightnessSlider = (props: BrightnessSliderProps) => {
   const theme = useTheme();
 
+  const onPressMinusButton = () => {
+    props.delegate.onValueChange(props.value - 0.1);
+  };
+
+  const onPressPlusButton = () => {
+    props.delegate.onValueChange(props.value + 0.1);
+  };
+
   return (
     <View style={styles.container}>
-      <Image style={styles.image} source={theme.images.moon} />
+      <ImageButton
+        source={theme.images.moon}
+        imageStyle={styles.image}
+        delegate={{onPress: onPressMinusButton}}
+      />
       <Slider
         style={styles.slider}
         value={props.value}
@@ -24,7 +37,11 @@ const BrightnessSlider = (props: BrightnessSliderProps) => {
         maximumValue={1}
         onSlidingComplete={props.delegate.onValueChange}
       />
-      <Image style={styles.image} source={theme.images.sun} />
+      <ImageButton
+        source={theme.images.sun}
+        imageStyle={styles.image}
+        delegate={{onPress: onPressPlusButton}}
+      />
     </View>
   );
 };

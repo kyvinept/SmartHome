@@ -1,8 +1,6 @@
 import styles from './styles';
-import {useObserver} from 'mobx-react-lite';
-import React, {useState} from 'react';
-import {Image, Text, TouchableOpacity, View} from 'react-native';
-import strings from 'translations';
+import React from 'react';
+import {Text, TouchableOpacity} from 'react-native';
 
 export interface TextButtonProps {
   text: string;
@@ -13,7 +11,10 @@ export interface TextButtonProps {
 
 const TextButton = (props: TextButtonProps) => {
   return (
-    <TouchableOpacity style={styles.container} onPress={props.delegate.onPress}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={props.delegate.onPress}
+      hitSlop={{top: 10, bottom: 10, right: 10, left: 10}}>
       <Text style={styles.text}>{props.text}</Text>
     </TouchableOpacity>
   );

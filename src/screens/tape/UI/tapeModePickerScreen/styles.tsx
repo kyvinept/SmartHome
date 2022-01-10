@@ -9,6 +9,9 @@ export default StyleSheet.create({
     flex: 1,
     backgroundColor: theme.colors.dimGrayWithOpacity(0.4),
   },
+  modeList: {
+    marginTop: 20,
+  },
   textInput: {
     margin: 20,
     borderWidth: 1,
@@ -25,7 +28,6 @@ export default StyleSheet.create({
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
     backgroundColor: theme.colors.white,
-    height: 500,
     width: '100%',
   },
 });

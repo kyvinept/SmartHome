@@ -10,17 +10,13 @@ export default StyleSheet.create({
     backgroundColor: theme.colors.dimGrayWithOpacity(0.4),
   },
   bottomButtonsView: {
-    flex: 1,
     justifyContent: 'flex-end',
   },
-  // dateTimePickerContainer: {
-  //   width: '50%',
-  // },
-  // textDateTime: {
-  //   fontSize: 14,
-  //   fontFamily: theme.fonts.ljkMilkMustacheBB,
-  //   marginBottom: -12,
-  // },
+  addButton: {
+    width: '100%',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
   textInput: {
     margin: 20,
     borderWidth: 1,
@@ -38,7 +34,7 @@ export default StyleSheet.create({
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
     backgroundColor: theme.colors.white,
-    height: 500,
+    // height: 500,
     width: '100%',
   },
 });

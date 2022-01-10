@@ -16,5 +16,6 @@ export default StyleSheet.create({
   text: {
     fontFamily: theme.fonts.ljkMilkMustacheBB,
     fontSize: 18,
+    textAlign: 'center',
   },
 });

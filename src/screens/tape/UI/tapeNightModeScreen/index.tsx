@@ -1,16 +1,18 @@
 import ShadowView from 'components/shadowView';
 import {useObserver} from 'mobx-react-lite';
 import NavigationService from 'navigations/NavigationService';
-import React, {useEffect, useState} from 'react';
-import {TouchableWithoutFeedback, View, TextInput, Text} from 'react-native';
-import {useTheme} from 'services/ThemeManager';
-import strings from 'translations';
+import React from 'react';
+import {
+  FlatList,
+  ListRenderItemInfo,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import styles from './styles';
 import TapeStore from 'screens/tape/TapeStore';
-import RedButton from 'components/redButton';
-import {PartShowingTape, ShowingModeType} from '../../TapeModel';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import AlertHelper from 'helpers/AlertHelper';
+import NightModeCell from './nightModeCell';
+import NightModeStore from 'screens/tape/NightModeStore';
+import TextButton from 'components/textButton';
 
 export interface TapeNightModeScreenProps {
   navigation: {
@@ -22,122 +24,29 @@ export interface TapeNightModeScreenProps {
   };
 }
 
-enum DisplayingTime {
-  start,
-  end,
-}
-
 const TapeNightModeScreen = (props: TapeNightModeScreenProps) => {
   const tapeStore = props.navigation.state.params.tapeStore;
-
-  const [startTime, setStartTime] = useState<Date | undefined>(
-    tapeStore.model.nightMode?.startTime,
-  );
-  const [endTime, setEndTime] = useState<Date | undefined>(
-    tapeStore.model.nightMode?.endTime,
-  );
-  const [displayingTime, setDisplayingTime] = useState<
-    DisplayingTime | undefined
-  >();
 
   const dismiss = () => {
     NavigationService.dismiss();
   };
 
-  const onPressStartTimeButton = () => {
-    if (displayingTime == DisplayingTime.start) setDisplayingTime(undefined);
-    else setDisplayingTime(DisplayingTime.start);
-  };
-
-  const onChangeStartTime = (evt: Event, date?: Date) => {
-    if (date) setStartTime(date);
-  };
-
-  const onPressEndTimeButton = () => {
-    if (displayingTime == DisplayingTime.end) setDisplayingTime(undefined);
-    else setDisplayingTime(DisplayingTime.end);
-  };
-
-  const onChangeEndTime = (evt: Event, date?: Date) => {
-    if (date) setEndTime(date);
-  };
-
-  const renderDateTimePicker = (
-    value: Date,
-    onChange: (evt: Event, date?: Date) => void,
-  ) => {
+  const renderNightModeItem = (item: ListRenderItemInfo<NightModeStore>) => {
     return (
-      <DateTimePicker
-        value={value}
-        mode="time"
-        is24Hour={true}
-        display="spinner"
-        onChange={onChange}
+      <NightModeCell
+        store={item.item}
+        index={item.index}
+        delegate={{onDelete: () => tapeStore.onDeleteNightMode(item.index)}}
       />
     );
   };
 
-  const renderTimeButtons = () => {
+  const renderAddButton = () => {
     return (
-      <>
-        <RedButton
-          text={
-            'Start time' +
-            (startTime
-              ? ': ' + startTime.getHours() + ':' + startTime.getMinutes().toString().padStart(2, '0')
-              : '')
-          }
-          delegate={{
-            onPress: onPressStartTimeButton,
-          }}
-        />
-        {displayingTime == DisplayingTime.start ? (
-          renderDateTimePicker(startTime || new Date(), onChangeStartTime)
-        ) : (
-          <View />
-        )}
-        <RedButton
-          text={
-            'End time' +
-            (endTime
-              ? ': ' + endTime.getHours() + ':' + endTime.getMinutes()
-              : '')
-          }
-          delegate={{
-            onPress: onPressEndTimeButton,
-          }}
-        />
-        {displayingTime == DisplayingTime.end ? (
-          renderDateTimePicker(endTime || new Date(), onChangeEndTime)
-        ) : (
-          <View />
-        )}
-      </>
-    );
-  };
-
-  const renderBottomButtons = () => {
-    return (
-      <View style={styles.bottomButtonsView}>
-        <RedButton
-          text={'Done'}
-          delegate={{
-            onPress: () => {
-              if (startTime && endTime) {
-                tapeStore.setNightMode(startTime, endTime);
-              } else {
-                AlertHelper.showErrorAlert('Start or end time were not setted');
-              }
-            },
-          }}
-        />
-        <RedButton
-          text={'Clear night mode'}
-          delegate={{
-            onPress: () => {
-              tapeStore.clearNightMode();
-            },
-          }}
+      <View style={styles.addButton}>
+        <TextButton
+          text="+ Add new time range"
+          delegate={{onPress: () => tapeStore.onAddNightMode()}}
         />
       </View>
     );
@@ -146,8 +55,13 @@ const TapeNightModeScreen = (props: TapeNightModeScreenProps) => {
   const renderBottomView = () => {
     return (
       <ShadowView containerStyle={styles.bottomView}>
-        {renderTimeButtons()}
-        {renderBottomButtons()}
+        {tapeStore.enabledToCreateNewNightMode ? renderAddButton() : <></>}
+        <FlatList
+          keyExtractor={(item, index) => String(index)}
+          data={tapeStore.nightModes}
+          renderItem={renderNightModeItem}
+          scrollEnabled={false}
+        />
       </ShadowView>
     );
   };

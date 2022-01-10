@@ -1,14 +1,19 @@
 import ShadowView from 'components/shadowView';
 import {useObserver} from 'mobx-react-lite';
 import NavigationService from 'navigations/NavigationService';
-import React, {useEffect, useState} from 'react';
-import {TouchableWithoutFeedback, View, TextInput} from 'react-native';
-import {useTheme} from 'services/ThemeManager';
-import strings from 'translations';
+import React from 'react';
+import {
+  TouchableWithoutFeedback,
+  View,
+  FlatList,
+  ListRenderItemInfo,
+  ImageSourcePropType,
+} from 'react-native';
 import styles from './styles';
 import TapeStore from 'screens/tape/TapeStore';
-import RedButton from 'components/redButton';
-import {PartShowingTape, ShowingModeType} from '../../TapeModel';
+import {ShowingMode, ShowingModeType} from '../../TapeModel';
+import ModeCell from './modeCell';
+import {useTheme} from 'services/ThemeManager';
 
 export interface TapeModePickerScreenProps {
   navigation: {
@@ -20,57 +25,69 @@ export interface TapeModePickerScreenProps {
   };
 }
 
-const TapeModePickerScreen = (props: TapeModePickerScreenProps) => {
-  const tapeStore = props.navigation.state.params.tapeStore;
+interface ShowingModeRenderModel {
+  showingMode: ShowingMode;
+  text: string;
+  image: ImageSourcePropType;
+}
 
-  const [value, setValue] = useState('');
+const TapeModePickerScreen = (props: TapeModePickerScreenProps) => {
+  const theme = useTheme();
+
+  const modesData: ShowingModeRenderModel[] = [
+    {
+      showingMode: {
+        type: ShowingModeType.full,
+      },
+      text: 'Default',
+      image: theme.images.showingMode,
+    },
+    {
+      showingMode: {
+        type: ShowingModeType.oneByOne,
+      },
+      text: 'One by one',
+      image: theme.images.moon,
+    },
+  ];
+
+  const tapeStore = props.navigation.state.params.tapeStore;
 
   const dismiss = () => {
     NavigationService.dismiss();
   };
 
+  const renderModeItem = (
+    itemProps: ListRenderItemInfo<ShowingModeRenderModel>,
+  ) => {
+    return (
+      <ModeCell
+        image={itemProps.item.image}
+        text={itemProps.item.text}
+        isLeft={itemProps.index % 2 === 0}
+        isActive={
+          itemProps.item.showingMode.type === tapeStore.model.showingMode.type
+        }
+        delegate={{
+          onPress: () => tapeStore.onChangeMode(itemProps.item.showingMode),
+        }}
+      />
+    );
+  };
+
   const renderBottomView = () => {
     return (
       <ShadowView containerStyle={styles.bottomView}>
-        <TextInput
-          style={styles.textInput}
-          value={value}
-          onChangeText={setValue}
-        />
-        <RedButton
-          text={'Done'}
-          delegate={{
-            onPress: () => {
-              const splitedValues = value
-                .split(';')
-                .map((item) => parseInt(item));
-              const partShowingTape: PartShowingTape[] = [];
-              for (let index = 0; index < splitedValues.length; index += 2) {
-                partShowingTape.push({
-                  from: splitedValues[index],
-                  to: splitedValues[index + 1],
-                });
-              }
-
-              tapeStore.onChangeMode({
-                type: ShowingModeType.part,
-                partShowingTape,
-              });
-
-              NavigationService.dismiss();
-            },
+        <FlatList
+          style={styles.modeList}
+          keyExtractor={(item, index) => String(index)}
+          data={modesData}
+          extraData={{
+            showingMode: tapeStore.model.showingMode,
           }}
-        />
-        <RedButton
-          text={'Full mode'}
-          delegate={{
-            onPress: () => {
-              tapeStore.onChangeMode({
-                type: ShowingModeType.full,
-              });
-              NavigationService.dismiss();
-            },
-          }}
+          numColumns={2}
+          renderItem={renderModeItem}
+          scrollEnabled={false}
         />
       </ShadowView>
     );

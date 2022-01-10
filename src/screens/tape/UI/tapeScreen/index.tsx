@@ -1,12 +1,9 @@
 import BackgroundView, {BackgroundViewProps} from 'components/backgroundView';
-import Switch from 'components/switch';
 import {useObserver} from 'mobx-react-lite';
 import NavigationService from 'navigations/NavigationService';
-import React, {useState} from 'react';
-import {View} from 'react-native';
+import React from 'react';
 import TapeStore from 'screens/tape/TapeStore';
 import {useTheme} from 'services/ThemeManager';
-import styles from './styles';
 import TapeControlView from '../tapeControlView';
 import TapeInfo from '../tapeInfo';
 import TapeVisualisation from '../tapeVisualisation';
@@ -50,7 +47,7 @@ const TapeScreen = (props: TapeScreenProps) => {
 
     return (
       <BackgroundView {...backgroundViewProps}>
-        <TapeInfo />
+        <TapeInfo description={tapeStore.model.description} />
         <TapeVisualisation tapeStore={tapeStore} />
         <TapeControlView tapeStore={tapeStore} />
       </BackgroundView>

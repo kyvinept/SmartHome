@@ -1,10 +1,9 @@
 import styles, {getLampLightStyle, getLampStyle} from './styles';
-import React, {useState} from 'react';
+import React from 'react';
 import {View} from 'react-native';
 import {useObserver} from 'mobx-react-lite';
 import TapeStore from 'screens/tape/TapeStore';
 import {TapeStatus} from 'screens/tape/TapeModel';
-import {interpolate} from 'helpers/interpolate';
 
 export interface TapeVisualisationProps {
   tapeStore: TapeStore;
@@ -16,7 +15,7 @@ const TapeVisualisation = (props: TapeVisualisationProps) => {
   const renderLamp = () => {
     return (
       <View style={getLampStyle(tapeStore.model.color)}>
-        {tapeStore.model.status == TapeStatus.on && (
+        {tapeStore.model.status === TapeStatus.on && (
           <View
             style={getLampLightStyle(
               tapeStore.model.color,

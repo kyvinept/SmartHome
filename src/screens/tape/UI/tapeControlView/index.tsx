@@ -2,7 +2,7 @@ import ColorsPanel from 'components/colorsPanel';
 import BrightnessSlider from 'components/brightnessSlider';
 import SwitchBitButton from 'components/switchBigButton';
 import {useObserver} from 'mobx-react-lite';
-import React, {useState} from 'react';
+import React from 'react';
 import {TapeStatus} from 'screens/tape/TapeModel';
 import TapeStore from 'screens/tape/TapeStore';
 import styles from './styles';
@@ -22,7 +22,7 @@ const TapeControlView = (props: TapeControlViewProps) => {
     return (
       <ShadowView containerStyle={styles.container}>
         <SwitchBitButton
-          isEnabled={tapeStore.model.status == TapeStatus.on}
+          isEnabled={tapeStore.model.status === TapeStatus.on}
           delegate={{onValueChange: tapeStore.toggleStatus}}
         />
         <ColorsPanel
