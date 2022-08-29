@@ -24,15 +24,16 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-      - uses: maierj/fastlane-action@v2.2.1
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
-        # uses: maierj/fastlane-action@v2.2.1
+        uses: maierj/fastlane-action@v2.2.1
         env:
           TEAM_ID: '${{ secrets.TEAM_ID }}'
           MATCH_PASSWORD: '${{ secrets.MATCH_PASSWORD }}'
           MATCH_KEYCHAIN_NAME: '${{ secrets.MATCH_KEYCHAIN_NAME }}'
           MATCH_KEYCHAIN_PASSWORD: '${{ secrets.MATCH_KEYCHAIN_PASSWORD }}'
-        run: |
-          fastlane make_build type:develop
+        with:
+          lane: make_build
+          subdirectory: 'ios'
+          options: '{ "type": "develop" }'
