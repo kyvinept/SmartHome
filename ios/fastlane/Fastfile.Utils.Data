@@ -108,14 +108,6 @@ module DataUtils
     
     # Loads required environment variables and secrets
     def self.prepare_env
-      # load common secret variables
-      if ENV["CI"] != nil
-        varaibles_path = self.secret_variables_path
-        Fastlane::Actions.sh("git clone --branch credentials --depth 1 git@gitlab.nixdev.co:nix_iphone/internal/gitlabcisettingssscripts.git #{varaibles_path}")
-        Dotenv.load "#{varaibles_path}/secretVariables.env"
-        Fastlane::Actions.sh("rm -rf #{varaibles_path}")
-      end
-
       self.load_variables
     end
 
