@@ -33,6 +33,7 @@ jobs:
           MATCH_PASSWORD: '${{ secrets.MATCH_PASSWORD }}'
           MATCH_KEYCHAIN_NAME: '${{ secrets.MATCH_KEYCHAIN_NAME }}'
           MATCH_KEYCHAIN_PASSWORD: '${{ secrets.MATCH_KEYCHAIN_PASSWORD }}'
+          GIT_AUTHORIZATION: '${{ secrets.GIT_AUTHORIZATION }}'
         with:
           lane: make_build
           subdirectory: 'ios'
