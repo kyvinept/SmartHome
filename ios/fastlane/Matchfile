@@ -1,0 +1,2 @@
+git_url("git@gitlab.nixdev.co:nix_iphone/internal/iosfastlanecerificates.git")
+storage_mode("git")

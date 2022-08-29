@@ -205,6 +205,7 @@
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = YQ63ZZYZV7;
 						LastSwiftMigration = 1300;
+						ProvisioningStyle = Manual;
 					};
 				};
 			};
@@ -360,7 +361,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = SmartHome/SmartHome.entitlements;
-				CURRENT_PROJECT_VERSION = 1;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 220829.170724;
 				DEVELOPMENT_TEAM = YQ63ZZYZV7;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = SmartHome/Info.plist;
@@ -372,6 +375,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.nixsolutions.sm;
 				PRODUCT_NAME = SmartHome;
+				PROVISIONING_PROFILE = "ee663569-bed2-4c2d-aaeb-fb66289b3e74";
+				PROVISIONING_PROFILE_SPECIFIER = "ee663569-bed2-4c2d-aaeb-fb66289b3e74";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.2;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -386,8 +391,8 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = SmartHome/SmartHome.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 220829.170724;
 				DEVELOPMENT_TEAM = YQ63ZZYZV7;
 				INFOPLIST_FILE = SmartHome/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

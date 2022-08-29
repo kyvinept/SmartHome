@@ -1,0 +1,353 @@
+fastlane_version "1.62.0"
+default_platform :ios
+
+fastlane_require 'faraday'
+fastlane_require 'xcodeproj'
+fastlane_require 'dotenv'
+fastlane_require 'fileutils'
+
+platform :ios do
+
+  skip_docs # skips creation of fastlane/README.txt
+
+  #################################### LIFE CYCLE ####################################
+  before_all do
+    import "Fastfile.Utils.Crypto"
+    import "Fastfile.Utils.Data"
+
+    # Load dev/deployment varibles
+    DataUtils::Env.prepare_env
+    unlock_mackeychain
+  end
+
+  #################################### CI LANES ####################################
+  # To make and deploy a build:
+  # 1. install_pods
+  # 2. make_build
+  # 3. deploy_mds / deploy_testflight
+  # 4. clean_project_build
+  ##################################################################################
+  desc "Installs cocoapods"
+  lane :install_pods do
+    cocoapods(
+      use_bundle_exec: false
+    )
+  end
+
+  desc "Creates build with desired type"
+  desc "Options:"
+  desc "type, String To make a build for; possible type options are defined in DataUtils::Config"
+  lane :make_build do |options|
+    begin
+      # initialize project with desired configuration
+      project = create_project(type: options[:type])
+      UI.crash! "Can't find project model" if project.nil?
+      # bump build version
+      update_version(project: project)
+      # fetch certificates and provisioning profiles with MATCH
+      sign(project: project)
+      # make a build
+      build(project: project)
+    rescue => ex
+      message = "iOS build failed with error message: #{ex.message}"
+      raise ex
+    end
+  end
+
+  desc "Deploys build and dsym to mds.nixsolutions.com for specified project type"
+  desc "Options:"
+  desc "type, String To deploy for; possible type options are defined in DataUtils::Config"
+  lane :deploy_mds do |options|
+    project = create_project(type: options[:type])
+    UI.crash! "Can't find project model" if project.nil?
+
+    deploy_host = ENV["DEPLOY_HOST"]
+    username   = ENV["DEPLOY_USER_NAME"]
+    deploy_port = ENV["DEPLOY_PORT"]
+    cmd_mkdir_for_path  = "mkdir -p #{project.mds_package_path}"
+
+    UI.important "======= Start deploy ipa to MDS =========="
+    FileUtils.chmod_R(0775, project.tmp_package_path)
+
+    destination = File.join(project.mds_package_path, project.ipa_file_name)
+    source = File.join(project.tmp_package_path, project.ipa_file_name)
+
+    unless File.file?("#{source}")
+       UI.crash! "!!! Can't find file by path #{source} !!!"
+    end
+    UI.important "src_ipa_path: #{source}"
+    UI.important "dst_ipa_path: #{destination}"
+    ssh(host: deploy_host, port: deploy_port, username: username, commands: cmd_mkdir_for_path )
+    scp(host: deploy_host, port: deploy_port, username: username, upload: {src: source, dst: destination })
+    UI.success "Build #{project.ipa_file_name} was successfully deployed"
+    UI.important "=========================================="
+
+    UI.important "======= Start deploy dSYM to MDS =========="
+    destination = File.join(project.mds_package_path, project.dsym_file_name)
+    source = File.join(project.tmp_package_path, project.dsym_file_name)
+    if File.file?("#{source}")
+      UI.important "src_dsym_path: #{source}"
+      UI.important "dst_dsym_path: #{destination}"
+      scp(host: deploy_host, port: deploy_port, username: username, upload: {src: source, dst: destination })
+      UI.success "dSYM #{project.dsym_file_name} was successfully deployed"
+      UI.important "=========================================="
+    else
+      UI.important "!!! Can't find file by path #{source} !!!"
+    end
+
+    user_data = create_user_data(project: project)
+    message = "Build #{project.ipa_file_name} was successfully deployed to `MDS`. ##{project.app_version}-#{project.configuration}"
+    send_slack_message(project: project, message: message, success: true)
+  end
+
+  desc "Deploys build to testflight for specified project type"
+  desc "Options:"
+  desc "type, String To deploy for; possible type options are defined in DataUtils::Config"
+  lane :deploy_testflight do |options|
+    project = create_project(type: options[:type])
+    UI.crash! "Can't find project model" if project.nil?
+    user_data = create_user_data(project: project)
+
+    ipa_path = "#{project.tmp_package_path}/#{project.ipa_file_name}"
+
+    UI.important "===================================================="
+    UI.important "Start pilot step (upload to TestFlight)!"
+    UI.important "User: #{user_data.itunes_connect_id}"
+    UI.important "Bundle id: #{project.bundle_id}"
+    UI.important "Apple id: #{project.app_apple_id}"
+    UI.important "IPA path: #{ipa_path}"
+    UI.important "ITC_TEAM_ID: #{user_data.itc_team_id}"
+    UI.important "===================================================="
+
+    pilot(username: user_data.itunes_connect_id,
+      app_identifier: project.bundle_id,
+      team_id: user_data.itc_team_id,
+      ipa: ipa_path,
+      skip_submission: true,
+      skip_waiting_for_build_processing: true,
+      distribute_external: false)
+
+      message = "Build was successfully deployed to `TestFlight`. #{project.app_version}"
+      message += "\nApple is processing it right now, will be available soon"
+      send_slack_message(project: project, message: message, success: true)
+
+  end
+
+  desc "Cleans build folder for specified project type"
+  desc "Options:"
+  desc "type, String To clean folder for; possible type options are defined in DataUtils::Config"
+  lane :clean_project_build do |options|
+    project = create_project(type: options[:type])
+    UI.crash! "Can't find project model" if project.nil?
+    FileUtils.rm_rf(project.tmp_package_path)
+  end
+
+  ############################## MANUAL MATCH SETUP (NOT FOR CI) #####################################
+  # Use thus helper methods for an project already has generated certs and provisioning profiles.
+  # The secound way to add existed certs and profiles is to use `fastlane match import`
+  # read documentation for details https://docs.fastlane.tools/actions/match/#import
+  # But be aware of this issue https://github.com/fastlane/fastlane/issues/16243
+  ####################################################################################################
+  desc "Encrypts repo with provision profiles and certs"
+  lane :match_encrypt do
+    match_encrypt_repo
+  end
+  
+  desc "Decrypts repo with provision profiles and certs"
+  lane :match_decrypt do
+    match_decrypt_repo
+  end
+
+  desc "Encrypts file"
+  lane :encrypt_file do
+    encrypt_file()
+  end
+
+  desc "Decrypts file"
+  lane :decrypt_file do
+    decrypt_file()
+  end
+
+  desc "Gets cert ID for manual encrypt for match"
+  desc "Options:"
+  desc "type, String Type for env vars"
+  lane :get_cert_id do |options|
+    project = create_project(type: options[:type])
+    UI.crash! "Can't find project model" if project.nil?
+    itunes_connect_email = DataUtils::FastlaneUserData.new(project.env_postfix).apple_id
+    if itunes_connect_email == nil
+      UI.crash! "Could not find variable for DELIVER_USER. Pls define it in CI Variables or bash_profile"
+    end
+
+    fastlane_require 'spaceship'
+    Spaceship.login(itunes_connect_email)
+    Spaceship.select_team
+    Spaceship.certificate.all.each do |cert|
+      cert_type = Spaceship::Portal::Certificate::CERTIFICATE_TYPE_IDS[cert.type_display_id].to_s.split("::")[-1]
+      puts "Cert id: #{cert.id}, name: #{cert.name}, expires: #{cert.expires.strftime("%Y-%m-%d")}, type: #{cert_type}, owner: #{cert.owner_name}"
+    end
+  end
+
+  desc "Generates certificates and profiles for specified project type"
+  desc "Options:"
+  desc "type, String To generate for; possible type options are defined in DataUtils::Config"
+  lane :generate_certificates do |options|
+    if prompt(
+        text: "Are you sure you want to generate new certificates and provisions?",
+        boolean: true)
+      if prompt(
+        text: "Are you REALLY sure you want to generate new certificates and provisions?",
+        boolean: true)
+      else
+       UI.user_error!("Finishing lane")
+      end
+    else
+      UI.user_error!("Finishing lane")
+    end
+    
+    project = create_project(type: options[:type])
+    UI.crash! "Can't find project model" if project.nil?
+    user_data = create_user_data(project: project)
+
+    match(
+      app_identifier: project.bundle_id,
+      type: project.match_build_type,
+      git_branch: user_data.team_id,
+      team_name: user_data.team_name,
+      verbose: true,
+      readonly: false)
+  end
+
+  ################################### Private lanes ###########################################
+  desc "Creates (if needed) and unlocks temporary keychain"
+  private_lane :unlock_mackeychain do
+    keychain_name = ENV["MATCH_KEYCHAIN_NAME"]
+    keychain_password = ENV["MATCH_KEYCHAIN_PASSWORD"]
+    # create temporary keychain to store cert
+    puts "name #{keychain_name}, pass: #{keychain_password}"
+
+    create_keychain(
+      name: keychain_name,
+      unlock: true,
+      lock_when_sleeps: false,
+      password: keychain_password,
+    )
+
+    unlock_keychain(
+      path: keychain_name,
+      password: keychain_password,
+      set_default: false
+    )
+  end
+
+  desc "Gets version and build number, fixes CURRENT_PROJECT_VERSION for fastlane get_build_number"
+  desc "Options:"
+  desc "project, DataUtils::Project To setup version and build number for"
+  private_lane :update_version do |options|
+    require 'xcodeproj'
+    project_model = options[:project]
+    increment_version_number(
+      version_number: project_model.build_version # Set a specific version number
+    )
+
+    xcode_proj = Xcodeproj::Project.open("../#{project_model.xcode_proj}")
+    xcode_proj.targets.each do |target|
+      target.build_configurations.each do |config|
+        config.build_settings['CURRENT_PROJECT_VERSION'] = project_model.build_number
+      end
+    end
+    xcode_proj.save
+
+    set_info_plist_value(path: project_model.app_plist, key: "GitHash", value: project_model.git_hash)
+    set_info_plist_value(path: project_model.app_plist, key: "CFBundleVersion", value: project_model.build_number)
+  end
+
+  desc "Setups signing for defined project"
+  desc "Options:"
+  desc "project, DataUtils::Project Defines all the data for project that needs to be signed"
+  private_lane :sign do |options|
+    project = options[:project]
+    user_data = create_user_data(project: project)
+    
+    UI.important "===================================================="
+    UI.important "=============        MATCH        =================="
+    UI.important "===================================================="
+    UI.important "Configuration: #{project.configuration}"
+    UI.important "Bundle id: #{project.bundle_id}"
+    UI.important "Match type: #{project.match_build_type}"
+    UI.important "IPA path: #{project.tmp_package_path}"
+    UI.important "===================================================="
+
+    match(
+      app_identifier: project.bundle_id,
+      type: project.match_build_type,
+      git_branch: user_data.team_id,
+      team_name: user_data.team_name,
+      verbose: true,
+      readonly: true) # WARNING: Use only readonly: true!!!
+
+    update_code_signing_settings(
+      path: project.xcode_proj,
+      use_automatic_signing: false,
+      team_id: user_data.team_id,
+      build_configurations: project.configuration,
+      code_sign_identity: project.code_signing_identity,
+      profile_name: project.match_profile_name,
+      profile_uuid: project.match_profile_uuid
+    )
+  end
+
+  desc "Makes build for defined project"
+  desc "Options:"
+  desc "project, DataUtils::Project Defines all the data for project that needs to be built"
+  private_lane :build do |options|
+    project = options[:project]
+    # Should we clear derived data always?
+    # clear_derived_data
+    clean_build_artifacts
+    update_info_plist(plist_path: project.app_plist, xcodeproj: project.xcode_proj, app_identifier: project.bundle_id)
+    update_app_identifier(plist_path: project.app_plist, xcodeproj: project.xcode_proj, app_identifier: project.bundle_id)
+    disable_automatic_code_signing(path: project.xcode_proj)
+
+    gym(
+      scheme: project.scheme,
+      configuration: project.configuration,
+      xcconfig: project.xcconfig,
+      export_method: project.gym_export_method,
+      output_directory: project.tmp_package_path,
+      output_name: project.ipa_file_name,
+      skip_profile_detection: true,
+      export_options: project.gym_export_options)
+  end
+
+  desc "Creates DataUtils::Project for defined type"
+  desc "Options:"
+  desc "type, String To create project for; possible type options are defined in DataUtils::Config"
+  private_lane :create_project do |options|
+    project = DataUtils::Project.new(options[:type])
+    project
+  end
+  
+  desc "Creates DataUtils::FastlaneUserData for defined project"
+  desc "Options:"
+  desc "project, DataUtils::Project To create user data for"
+  private_lane :create_user_data do |options|
+    project = options[:project]
+    user_data = DataUtils::FastlaneUserData.new(project.env_postfix)
+    user_data
+  end
+
+  desc "Sends message to Slack"
+  desc "Options:"
+  desc "project, DataUtils::Project To find out slack url to post to"
+  desc "message, STRING Text to post"
+  desc "success, BOOL Defines whether the message should be marked as success or failure"
+  private_lane :send_slack_message do |options|
+    user_data = create_user_data(project: options[:project])
+    slack_url = user_data.slack_url
+    
+    if (slack_url != nil) and (ENV["CI"] != nil)
+      slack(message: options[:message], success: options[:success], slack_url: slack_url)
+    end
+  end
+end

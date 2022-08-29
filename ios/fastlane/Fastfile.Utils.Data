@@ -1,0 +1,343 @@
+fastlane_require 'dotenv'
+fastlane_version "2.127.0"
+
+default_platform :ios
+
+module DataUtils
+    
+  #################################### CONFIGURATIONS ####################################
+  # This class is created to setup different build configurations for your project.
+  # Predefined configs are: develop, adhoc and distribution.
+  # Please, look through all the parameters of each config, replace it with ones that are
+  # relevant for your project, and use it. Or create your very own config.
+  ########################################################################################
+  class Config
+    # Base config with project data
+    def self.default_config
+      {
+        :config_name        => Config::DEVELOP,
+        :workspace          => "SmartHome",
+        :scheme             => "SmartHome",
+        :app_plist          => "SmartHome/Info.plist",
+        :xcode_proj         => "SmartHome.xcodeproj",
+        :code_signing_identity => "Apple Development",
+        :configuration      => "Debug",
+        :bundle_id          => "com.nixsolutions.sm",
+        :build_version      => "1.0.0",
+        # Configuration, if exist
+        #:xcconfig       => "Configurations/Release.xcconfig",
+        :match_build_type   => "development",
+        :gym_export_method  => "development",
+        :env_postfix        => "",
+        :default_package_path => "iPhoneProjects",
+        :gym_export_options => {
+          compileBitcode: false,
+        },
+
+        # package params
+        :prefix_input_path => "/tmp/iOSbuilds",
+        :prefix_output_path => "/home/mds/Projects",
+
+        # pilot info
+        :app_apple_id => ENV["APP_APPLE_ID"]
+      }
+    end
+
+    def self.adhoc_config
+      config = default_config.clone   
+      config[:config_name] = Config::ADHOC
+      config[:configuration] = "Release"
+      config[:code_signing_identity] = "Apple Distribution"
+      # Configuration, if exist
+      #config[:xcconfig] = "Configurations/Release.xcconfig"
+      config[:match_build_type] = "adhoc"
+      config[:gym_export_method] = "ad-hoc"
+      config[:env_postfix] = "" #"_ADHOC"
+      return config
+    end
+
+    def self.distribution_config
+      config = default_config.clone
+      config[:config_name] = Config::DISTRIBUTION
+      config[:configuration] = "Release"
+      config[:code_signing_identity] = "Apple Distribution"
+      # Configuration, if exist
+      #config[:xcconfig] = "Configurations/Release.xcconfig"
+      config[:match_build_type] = "appstore"
+      config[:gym_export_method] = "app-store"
+      config[:env_postfix] = "" #"_APPSTORE"
+      return config
+    end
+
+    def self.develop_config
+      return default_config.clone
+    end
+
+    def self.create(build_type)
+      UI.crash! "Build type is not defined. Available build types: #{Config::ALL_CONFIGS_DESC}" if build_type.nil?
+
+      config = nil
+      
+      case build_type
+      when Config::DEVELOP
+        config = Config.develop_config
+      when Config::ADHOC
+        config = Config.adhoc_config
+      when Config::DISTRIBUTION
+        config = Config.distribution_config
+      else
+        UI.crash! "Build type #{build_type} doesn't exist. Available build types: #{Config::ALL_CONFIGS_DESC}"
+      end
+
+      config
+    end
+
+    # Private methods
+    #
+    private
+    # Constant names of configs
+    DEVELOP = "develop"
+    ADHOC = "adhoc"
+    DISTRIBUTION = "distribution"
+    ALL_CONFIGS_DESC = "#{Config::DEVELOP}, #{Config::ADHOC}, #{Config::DISTRIBUTION}"
+  end
+  private_constant :Config
+  
+  # This class encapsulates methods for preparing env variables
+  class Env
+    
+    # Loads required environment variables and secrets
+    def self.prepare_env
+      # load common secret variables
+      if ENV["CI"] != nil
+        varaibles_path = self.secret_variables_path
+        Fastlane::Actions.sh("git clone --branch credentials --depth 1 git@gitlab.nixdev.co:nix_iphone/internal/gitlabcisettingssscripts.git #{varaibles_path}")
+        Dotenv.load "#{varaibles_path}/secretVariables.env"
+        Fastlane::Actions.sh("rm -rf #{varaibles_path}")
+      end
+
+      self.load_variables
+    end
+
+    # Private methods
+    #
+    private
+    def self.load_variables
+      if ENV["CI"] == nil
+        # Update your private local .env.secret file with proper information
+        secrets_path = "#{Dir.pwd}/.env.secrets"
+        unless File.file?(secrets_path)
+          UI.crash! "No file was found at path #{secrets_path}"
+        end
+      Dotenv.overload secrets_path
+      end
+    end
+
+    def self.secret_variables_path
+      varaibles_path = ""
+
+      if ENV["CI"].nil?
+        varaibles_path = "/tmp/fastlanesetup"
+      else
+        concurrent_id = ENV["CI_CONCURRENT_ID"]
+        varaibles_path = "/tmp/#{concurrent_id}/fastlanesetup"
+      end
+
+      return varaibles_path
+    end
+  end
+
+  # This class is designed to be source of data about your project configurations in lane
+  class Project
+
+    attr_reader :config_name
+    attr_reader :workspace
+    attr_reader :scheme
+    attr_reader :app_plist
+    attr_reader :xcode_proj
+    attr_reader :configuration
+    attr_reader :bundle_id
+    attr_reader :xcconfig
+    attr_reader :match_build_type
+    attr_reader :gym_export_method
+    attr_reader :prefix_output_path
+    attr_reader :prefix_input_path
+    attr_reader :app_apple_id
+    attr_reader :gym_export_options
+    attr_reader :env_postfix
+    attr_reader :code_signing_identity
+    attr_reader :build_version
+    attr_reader :default_package_path
+
+    def initialize(build_type) # defined in DataUtils::Config
+      config = Config.create(build_type)
+
+      @workspace          = config[:workspace]
+      @scheme             = config[:scheme]
+      @app_plist          = config[:app_plist]
+      @xcode_proj         = config[:xcode_proj]
+      @configuration      = config[:configuration]
+      @bundle_id          = config[:bundle_id]
+      @xcconfig           = config[:xcconfig]
+      @match_build_type   = config[:match_build_type]
+      @gym_export_method  = config[:gym_export_method]
+      @prefix_input_path  = config[:prefix_input_path]
+      @prefix_output_path = config[:prefix_output_path]
+      @app_apple_id       = config[:app_apple_id]
+      @gym_export_options = config[:gym_export_options]
+      @env_postfix        = config[:env_postfix]
+      @code_signing_identity = config[:code_signing_identity]
+      @config_name        = config[:config_name]
+      @build_version      = config[:build_version]
+      @default_package_path = config[:default_package_path]
+      @calculated_build_number = nil
+    end
+
+    def ipa_file_name
+      return "#{self.scheme}.ipa"
+    end
+
+    def dsym_file_name
+      return "#{self.scheme}.app.dSYM.zip"
+    end
+
+    def app_version
+      return "v.#{build_version}_#{build_number}"
+    end
+
+    def git_hash
+      build_dir = nil
+      Dir.chdir("..") do
+        build_dir = Dir.pwd
+      end
+      githash = Fastlane::Actions.sh("cd \"#{build_dir}\" && git log --pretty=format:\"%h\" -n 1")
+    end
+
+    def build_number
+      if @calculated_build_number != nil
+        return @calculated_build_number
+      end
+
+      result = nil
+
+      if ENV["APPSTORE_BUILD_NUMBER"]
+        # get last number in itunes_connect
+        user_data = DataUtils::FastlaneUserData.new(@env_postfix)
+        build_number = Fastlane::Actions::LatestTestflightBuildNumberAction.run(
+          version: @build_version,
+          app_identifier: @bundle_id,
+          team_id: user_data.itc_team_id,
+          team_name: user_data.team_name,
+          username: user_data.apple_id,
+          initial_build_number: 0
+        )
+
+        result = build_number + 1
+      else
+        # usual number calculation from git date
+        Dir.chdir("..") do
+          build_dir = Dir.pwd
+          result = Fastlane::Actions.sh("cd \"#{build_dir}\" && git log -1 --date=format:\"%y%m%d.%H%M%S\" --format=\"%ad\" | tr -d '\n'")
+        end
+      end
+
+      @calculated_build_number = result
+      return result
+    end
+
+    # /home/mds/Projects/iPhoneProjects/com.testnixsolutions.DrivittyGo/v.1.1.0_959alpha/Debug
+    def mds_package_path
+      return File.join(self.prefix_output_path, package_path)
+    end
+
+    # Path to local folder with .ipa and dSYM files
+    # e.g.: /tmp/build/iPhoneProjects/com.testnixsolutions.DrivittyGo/v.1.1.0_959alpha/Debug/
+    def tmp_package_path
+      return File.join(self.prefix_input_path, package_path)
+    end
+
+    # You need to use thus `match` methods after `fastlane match` done job about sync certs and profiles
+    # see more info about `match` env variables
+    # https://docs.fastlane.tools/codesigning/xcode-project/#set-using-environment-variable
+    def match_profile_uuid
+      profile_uuid_key = "sigh_#{self.bundle_id}_#{self.match_build_type}"
+      return validate(profile_uuid_key)
+    end
+
+    def match_profile_name
+      profile_name_key = "sigh_#{self.bundle_id}_#{self.match_build_type}_profile-name"
+      return validate(profile_name_key)
+    end
+
+    def match_profile_team_id
+      profile_team_id_key = "sigh_#{self.bundle_id}_#{self.match_build_type}_team-id"
+      return validate(profile_team_id_key)
+    end
+
+    def match_profile_path
+      profile_path_key = "sigh_#{self.bundle_id}_#{self.match_build_type}_profile-path"
+      return validate(profile_path_key)
+    end
+
+    # Private methods
+    #
+    private
+    def package_path
+      output_directory = ENV["OUTPUT_DIRECTORY"]
+      if output_directory == nil
+        if ENV["CI"] == nil 
+          output_directory = self.default_package_path
+        else
+          UI.crash! "OUTPUT_DIRECTORY is not defined. Make sure you did DataUtils::Env.prepare_env"
+        end
+      end
+
+      result_path = "#{output_directory}"
+      result_path << "/#{self.bundle_id}"
+      result_path << "/#{app_version}"
+      result_path << "/#{self.configuration}"
+
+      # iPhoneProjects/com.testnixsolutions.DrivittyGo/v.1.1.0_959alpha/Debug
+      return result_path
+    end
+
+    def validate(key)
+      value = ENV[key]
+      if value.nil?
+        message = "You're trying to use key #{key} in DataUtils::Project, but value is not found\n"
+        message += "Make sure you do it after `fastlane match sync`"
+        UI.crash! message
+      end
+      return value
+    end
+  end
+
+  # Use this class in lanes instead of Appfile
+  # This class is created to be single source of truth
+  # about user data that is required to create/deploy builds
+  class FastlaneUserData
+
+    attr_reader :slack_url
+    attr_reader :apple_id
+    attr_reader :team_name
+    attr_reader :team_id
+    attr_reader :itc_team_id
+    attr_reader :itunes_connect_id
+
+    def initialize(postfix)
+      @slack_url         = ENV["SLACK_URL" + (postfix or "")]
+      @apple_id          = ENV["APPLE_ID" + (postfix or "")]
+      @team_name         = ENV["TEAM_NAME" + (postfix or "")]
+      @team_id           = ENV["TEAM_ID" + (postfix or "")]
+      @itc_team_id       = ENV["ITC_TEAM_ID" + (postfix or "")]
+      if ENV["CI"].nil?
+        @itunes_connect_id = ENV["ITUNES_CONNECT_ID" + (postfix or "")]
+      else
+        # On CI use NIX_INTERNAL_DEPLOY_USER and NIX_INTERNAL_DEPLOY_PASSWORD for internal Projects
+        # and NIX_EXTERNAL_DEPLOY_USER + NIX_EXTERNAL_DEPLOY_PASSWORD for external projects
+        @itunes_connect_id = ENV["NIX_INTERNAL_DEPLOY_USER"]
+        ENV["FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD"] = ENV["NIX_INTERNAL_DEPLOY_PASSWORD"]
+      end
+    end
+  end
+ end
