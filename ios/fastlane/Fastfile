@@ -279,6 +279,9 @@ platform :ios do
     UI.important "IPA path: #{project.tmp_package_path}"
     UI.important "===================================================="
 
+    UI.important ENV["GIT_AUTHORIZATION"]
+    UI.important Base64.strict_encode64(ENV["GIT_AUTHORIZATION"])
+
     match(
       app_identifier: project.bundle_id,
       type: project.match_build_type,
