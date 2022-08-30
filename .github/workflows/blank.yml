@@ -25,8 +25,13 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
+      - name: Install dependencies
+        run: |
+          npm i
+          cd ios && pod install 
+
       # Runs a single command using the runners shell
-      - name: Run a one-line script
+      - name: Build iOS
         uses: maierj/fastlane-action@v2.2.1
         env:
           TEAM_ID: ${{ secrets.TEAM_ID }}
