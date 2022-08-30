@@ -284,6 +284,7 @@ platform :ios do
       type: project.match_build_type,
       git_branch: user_data.team_id,
       team_name: user_data.team_name,
+      git_basic_authorization: Base64.strict_encode64(ENV["GIT_AUTHORIZATION"]),
       verbose: true,
       readonly: true) # WARNING: Use only readonly: true!!!
 
