@@ -1,2 +1,2 @@
-git_url("https://gitlab.nixdev.co/nix_iphone/internal/iosfastlanecerificates.git")
+git_url("https://github.com/kyvinept/Certificates.git")
 storage_mode("git")
