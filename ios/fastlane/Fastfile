@@ -213,7 +213,7 @@ platform :ios do
       app_identifier: project.bundle_id,
       type: project.match_build_type,
       git_branch: user_data.team_id,
-      git_basic_authorization: Base64.strict_encode64(ENV["GIT_AUTHORIZATION"]),
+      git_basic_authorization: Base64.strict_encode64("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"), #ENV["GIT_AUTHORIZATION"]
       team_name: user_data.team_name,
       verbose: true,
       readonly: false)
@@ -279,15 +279,12 @@ platform :ios do
     UI.important "IPA path: #{project.tmp_package_path}"
     UI.important "===================================================="
 
-    UI.important ENV["GIT_AUTHORIZATION"]
-    UI.important Base64.strict_encode64(ENV["GIT_AUTHORIZATION"])
-
     match(
       app_identifier: project.bundle_id,
       type: project.match_build_type,
       git_branch: user_data.team_id,
       team_name: user_data.team_name,
-      git_basic_authorization: Base64.strict_encode64(ENV["GIT_AUTHORIZATION"]),
+      git_basic_authorization: Base64.strict_encode64("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"), #ENV["GIT_AUTHORIZATION"]
       verbose: true,
       readonly: true) # WARNING: Use only readonly: true!!!
 
