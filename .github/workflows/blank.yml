@@ -29,12 +29,12 @@ jobs:
       - name: Run a one-line script
         uses: maierj/fastlane-action@v2.2.1
         env:
-          TEAM_ID: '${{ secrets.TEAM_ID }}'
-          MATCH_PASSWORD: '${{ secrets.MATCH_PASSWORD }}'
-          MATCH_KEYCHAIN_NAME: '${{ secrets.MATCH_KEYCHAIN_NAME }}'
-          MATCH_KEYCHAIN_PASSWORD: '${{ secrets.MATCH_KEYCHAIN_PASSWORD }}'
-          GIT_AUTHORIZATION: '${{ secrets.GIT_AUTHORIZATION }}'
-          OUTPUT_DIRECTORY: '${{ secrets.OUTPUT_DIRECTORY }}'
+          TEAM_ID: ${{ secrets.TEAM_ID }}
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          MATCH_KEYCHAIN_NAME: ${{ secrets.MATCH_KEYCHAIN_NAME }}
+          MATCH_KEYCHAIN_PASSWORD: ${{ secrets.MATCH_KEYCHAIN_PASSWORD }}
+          GIT_AUTHORIZATION: ${{ secrets.GIT_AUTHORIZATION }}
+          OUTPUT_DIRECTORY: ${{ secrets.OUTPUT_DIRECTORY }}
         with:
           lane: make_build
           subdirectory: 'ios'
