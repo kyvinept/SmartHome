@@ -213,7 +213,7 @@ platform :ios do
       app_identifier: project.bundle_id,
       type: project.match_build_type,
       git_branch: user_data.team_id,
-      git_basic_authorization: Base64.strict_encode64("kyvinept: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"), #ENV["GIT_AUTHORIZATION"]
+      # git_basic_authorization: Base64.strict_encode64("kyvinept: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"), #ENV["GIT_AUTHORIZATION"]
       team_name: user_data.team_name,
       verbose: true,
       readonly: false)
@@ -284,7 +284,7 @@ platform :ios do
       type: project.match_build_type,
       git_branch: user_data.team_id,
       team_name: user_data.team_name,
-      git_basic_authorization: Base64.strict_encode64("kyvinept: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"), #ENV["GIT_AUTHORIZATION"]
+      # git_basic_authorization: Base64.strict_encode64("kyvinept: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"), #ENV["GIT_AUTHORIZATION"]
       verbose: true,
       readonly: true) # WARNING: Use only readonly: true!!!
 
